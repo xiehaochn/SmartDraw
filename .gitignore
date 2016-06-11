@@ -1,7 +1,0 @@
-
-
-# Intellij project files
-*.iml
-*.ipr
-*.iws
-/Src/.idea/
