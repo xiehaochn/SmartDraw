@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     android:id="@+id/colorDialog" 
+   android:layout_width="match_parent" android:minWidth="300dp"
+   android:layout_height="match_parent" android:orientation="vertical">
+   	
+   <LinearLayout 
+      android:background="#FFFFFFFF"
+      android:layout_width="fill_parent" 
+	  android:layout_height="35dp"	
+      android:layout_marginTop="10dp"
+      android:layout_marginLeft="10dp"
+      android:layout_marginRight="10dp"
+      android:orientation="horizontal">
+      <Button 
+        android:id="@+id/setblack"
+		android:layout_width="wrap_content"
+		android:layout_height="30dp"
+		android:layout_weight="1"
+		android:layout_gravity="center"
+		android:background="#FF000000"/>
+      <Button 
+		android:id="@+id/setgrey"
+		android:layout_width="wrap_content"
+		android:layout_height="30dp"
+		android:layout_weight="1"
+		android:layout_gravity="center"
+		android:background="#FF808080"/>
+      <Button 
+		android:id="@+id/setpurple"
+		android:layout_width="wrap_content"
+		android:layout_height="30dp"
+		android:layout_weight="1"
+		android:layout_gravity="center"
+		android:background="#FF800080"/>
+      <Button
+        android:id="@+id/setpeach"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:background="#FFFFDAB9" />
+      <Button 
+        android:id="@+id/setblue"
+		android:layout_width="wrap_content"
+		android:layout_height="30dp"
+		android:layout_weight="1"
+		android:layout_gravity="center"
+		android:background="#FF0000CD"/>    
+   </LinearLayout>
+   
+   <LinearLayout 
+      android:background="#FFFFFFFF"
+      android:layout_width="fill_parent" 
+	  android:layout_height="35dp"	
+      android:layout_marginLeft="10dp"
+      android:layout_marginRight="10dp"
+      android:layout_marginBottom="10dp"
+      android:orientation="horizontal">
+      <Button 
+        android:id="@+id/setred"
+		android:layout_width="wrap_content"
+		android:layout_height="30dp"
+		android:layout_weight="1"
+		android:layout_gravity="center"
+		android:background="#FFFF0000"/>
+      <Button 
+		android:id="@+id/setorange"
+		android:layout_width="wrap_content"
+		android:layout_height="30dp"
+		android:layout_weight="1"
+		android:layout_gravity="center"
+		android:background="#FFFFA500"/>
+      <Button 
+		android:id="@+id/setyellow"
+		android:layout_width="wrap_content"
+		android:layout_height="30dp"
+		android:layout_weight="1"
+		android:layout_gravity="center"
+		android:background="#FFFFFF00"/>
+      <Button 
+		android:id="@+id/setgreen"
+		android:layout_width="wrap_content"
+		android:layout_height="30dp"
+		android:layout_weight="1"
+		android:layout_gravity="center"
+		android:background="#FF008000"/> 
+	  <Button 
+		android:id="@+id/setcyan"
+		android:layout_width="wrap_content"
+		android:layout_height="30dp"
+		android:layout_weight="1"
+		android:layout_gravity="center"
+		android:background="#FF00FFFF"/>   
+   </LinearLayout>
+   
+   
+   <ImageView android:id="@+id/color_width"
+      android:layout_width="match_parent" android:layout_height="50dp"
+      android:layout_margin="10dp"/>
+   <SeekBar android:layout_height="wrap_content" android:max="50"
+      android:id="@+id/widthSeekBar" android:layout_width="match_parent"
+      android:layout_margin="20dp" android:paddingLeft="20dp"
+      android:paddingRight="20dp" 
+      android:layout_gravity="center_horizontal"/>
+   
+   <Button android:id="@+id/setColorButton"
+      android:layout_width="wrap_content" 
+      android:layout_height="wrap_content"  
+      android:layout_gravity="center_horizontal"
+      android:text="确定"/>
+    
+
+</LinearLayout>

@@ -1,0 +1,101 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity" 
+    android:orientation="vertical">  
+
+    <FrameLayout 
+    	android:layout_width="fill_parent"
+    	android:layout_height="fill_parent"
+    	android:layout_above="@+id/line">
+     <ImageView  
+        android:id="@+id/iv_after"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" /> 
+        
+     <com.pre.DoodleView
+        android:id="@+id/doodleView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />	
+	</FrameLayout>
+    	
+	<LinearLayout
+	    android:id="@+id/line"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:background="#FF808080"
+	    android:layout_alignParentBottom="true"
+	    android:layout_marginBottom="5dp"
+	    android:layout_marginLeft="10dp"
+	    android:layout_marginRight="10dp"> 
+    
+		<ImageButton 
+	        android:id="@+id/pen"
+	        android:layout_width="40dp"
+	        android:layout_height="60dp"
+	        android:layout_weight="1"	        
+	        android:onClick="pen"	
+	        android:src="@drawable/pen"        
+	        />
+		<ImageButton 
+	        android:id="@+id/eraser"
+	        android:layout_width="40dp"
+	        android:layout_height="60dp"
+	        android:layout_weight="1"
+	        android:onClick="eraser"
+	        android:src="@drawable/eraser"/>
+		<ImageButton 
+	        android:id="@+id/color"
+	        android:layout_width="40dp"
+	        android:layout_height="60dp"
+	        android:layout_weight="1"
+	        android:onClick="color"
+	        android:src="@drawable/color"/>	
+		<ImageButton 
+	        android:id="@+id/undo"
+	        android:layout_width="40dp"
+	        android:layout_height="60dp"
+	        android:layout_weight="1"
+	        android:onClick="undo"
+	        android:src="@drawable/undo"/>
+		<ImageButton 
+	        android:id="@+id/redo"
+	        android:layout_width="40dp"
+	        android:layout_height="60dp"
+	        android:layout_weight="1"
+	        android:onClick="redo"
+	        android:src="@drawable/redo"/>
+		<ImageButton 
+	        android:id="@+id/clear"
+	        android:layout_width="40dp"
+	        android:layout_height="60dp"
+	        android:layout_weight="1"
+	        android:onClick="clear"
+	        android:src="@drawable/clear"/>						
+			
+		<ImageButton 
+	        android:id="@+id/save"
+	        android:layout_width="40dp"
+	        android:layout_height="60dp"
+	        android:layout_weight="1"
+	        android:onClick="save"
+	        android:src="@drawable/save"/>
+		<ImageButton 
+	        android:id="@+id/select"
+	        android:layout_width="40dp"
+	        android:layout_height="60dp"
+	        android:layout_weight="1"
+	        android:onClick="select"
+	        android:src="@drawable/select"/>
+		<ImageButton 
+	        android:id="@+id/delete"
+	        android:layout_width="40dp"
+	        android:layout_height="60dp"
+	        android:layout_weight="1"
+	        android:onClick="delete"
+	        android:src="@drawable/close"/>
+	</LinearLayout>
+		
+
+</RelativeLayout>
