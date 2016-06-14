@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory.Options;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -513,10 +514,21 @@ public class MainActivity extends Activity
 	public void save(View view)
 	{
 		doodleView.save();
-		Intent intent=new Intent();
-		intent.setAction(Intent.ACTION_MEDIA_MOUNTED);
-		intent.setData(Uri.fromFile(Environment.getExternalStorageDirectory()));
-		sendBroadcast(intent);
+//		Intent intent=new Intent();
+//		intent.setAction(Intent.ACTION_MEDIA_MOUNTED);
+//		intent.setData(Uri.fromFile(Environment.getExternalStorageDirectory()));
+//		sendBroadcast(intent);
+		//以上代码在4.4以上的系统会强退
+		//文件系统会更新，但相册不能，相册只有才重启后才能更新
+		MediaScannerConnection.scanFile(this, new String[]{
+				Environment.getExternalStorageDirectory().getAbsolutePath()},
+				null, new MediaScannerConnection.OnScanCompletedListener()
+				{
+					public void onScanCompleted(String path, Uri uri)
+					{
+
+					}
+				});
 	}
 
 	public void select(View view)
