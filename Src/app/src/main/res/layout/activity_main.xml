@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
 
     tools:context=".MainActivity">
+
     <LinearLayout
 
         android:orientation="horizontal"
@@ -33,6 +34,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp" />
     </LinearLayout>
+
     <RelativeLayout
         android:layout_below="@id/linearlayout"
         android:layout_width="match_parent"
@@ -41,11 +43,11 @@
         >
         <ImageView
             android:src="@drawable/huaban"
-            android:layout_marginStart="100dp"
-            android:layout_marginTop="60dp"
+            android:layout_marginStart="110dp"
+            android:layout_marginTop="80dp"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            android:layout_marginLeft="80dp"
+            android:layout_marginLeft="110dp"
             android:id="@+id/imageview_1"
             />
         <TextView
@@ -54,12 +56,12 @@
             android:layout_marginTop="10dp"
             android:text="画板"
             android:layout_below="@id/imageview_1"
-            android:layout_marginStart="105dp"
+            android:layout_marginStart="115dp"
             android:textColor="@color/textColor"
             android:textSize="25dp"
             android:gravity="center"
             android:padding="2dp"
-            android:layout_marginLeft="100dp" />
+            android:layout_marginLeft="115dp" />
         <ImageView
             android:layout_width="64dp"
             android:layout_height="64dp"
@@ -69,9 +71,8 @@
             android:layout_toRightOf="@id/imageview_1"
             android:layout_marginStart="40dp"
             android:layout_marginLeft="40dp"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="80dp"
             android:id="@+id/imageview_2"
-
             />
         <TextView
             android:layout_width="wrap_content"
@@ -88,11 +89,11 @@
             android:layout_toRightOf="@id/imageview_1" />
         <ImageView
             android:src="@drawable/liulan"
-            android:layout_marginStart="100dp"
-            android:layout_marginTop="200dp"
+            android:layout_marginStart="110dp"
+            android:layout_marginTop="210dp"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            android:layout_marginLeft="80dp"
+            android:layout_marginLeft="110dp"
             android:id="@+id/imageview_3"
             />
         <TextView
@@ -101,12 +102,12 @@
             android:layout_marginTop="10dp"
             android:text="浏览"
             android:layout_below="@id/imageview_3"
-            android:layout_marginStart="105dp"
+            android:layout_marginStart="115dp"
             android:textColor="@color/textColor"
             android:textSize="25dp"
             android:gravity="center"
             android:padding="2dp"
-            android:layout_marginLeft="100dp" />
+            android:layout_marginLeft="115dp" />
         <ImageView
             android:layout_width="64dp"
             android:layout_height="64dp"
@@ -115,9 +116,8 @@
             android:layout_toRightOf="@id/imageview_3"
             android:layout_marginStart="40dp"
             android:layout_marginLeft="40dp"
-            android:layout_marginTop="200dp"
+            android:layout_marginTop="210dp"
             android:id="@+id/imageview_4"
-
             />
         <TextView
             android:layout_width="wrap_content"
