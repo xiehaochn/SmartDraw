@@ -8,26 +8,26 @@
         layout="@layout/view_toolbar"/>
 
     <FrameLayout
+        android:layout_below="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/line">
+        android:layout_above="@+id/tools">
 
         <ImageView
-            android:id="@+id/iv_after"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
     </FrameLayout>
 
     <LinearLayout
-        android:id="@+id/line"
+        android:id="@+id/tools"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="#E0FFFF"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp">
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp">
 
         <ImageButton
             android:id="@+id/pen"
@@ -37,6 +37,7 @@
             android:onClick="pen"
             android:background="@drawable/pen"
             android:elevation="@dimen/default_elevation"
+            android:layout_marginRight="7dp"
             />
         <ImageButton
             android:id="@+id/eraser"
@@ -45,7 +46,8 @@
             android:layout_weight="1"
             android:onClick="eraser"
             android:background="@drawable/eraser"
-            android:elevation="@dimen/default_elevation"/>
+            android:elevation="@dimen/default_elevation"
+            android:layout_marginRight="7dp"/>
         <ImageButton
             android:id="@+id/color"
             android:layout_width="wrap_content"
@@ -53,7 +55,8 @@
             android:layout_weight="1"
             android:onClick="color"
             android:background="@drawable/color"
-            android:elevation="@dimen/default_elevation"/>
+            android:elevation="@dimen/default_elevation"
+            android:layout_marginRight="7dp"/>
         <ImageButton
             android:id="@+id/undo"
             android:layout_width="wrap_content"
@@ -61,7 +64,8 @@
             android:layout_weight="1"
             android:onClick="undo"
             android:background="@drawable/undo"
-            android:elevation="@dimen/default_elevation"/>
+            android:elevation="@dimen/default_elevation"
+            android:layout_marginRight="7dp"/>
         <ImageButton
             android:id="@+id/redo"
             android:layout_width="wrap_content"
@@ -69,7 +73,8 @@
             android:layout_weight="1"
             android:onClick="redo"
             android:background="@drawable/redo"
-            android:elevation="@dimen/default_elevation"/>
+            android:elevation="@dimen/default_elevation"
+            android:layout_marginRight="7dp"/>
         <ImageButton
             android:id="@+id/clear"
             android:layout_width="wrap_content"
@@ -77,7 +82,8 @@
             android:layout_weight="1"
             android:onClick="clear"
             android:background="@drawable/clear"
-            android:elevation="@dimen/default_elevation"/>
+            android:elevation="@dimen/default_elevation"
+            android:layout_marginRight="7dp"/>
 
         <ImageButton
             android:id="@+id/save"
