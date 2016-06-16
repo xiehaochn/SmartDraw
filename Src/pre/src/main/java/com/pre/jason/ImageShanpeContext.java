@@ -2,13 +2,30 @@ package com.pre.jason;
 
 import android.graphics.Bitmap;
 
-public class Image
+public class ImageShanpeContext
 {
+    private static final int CENTER_OF_BITMAP = 0;
+    private static final int CENTER_OF_MASS = 1;
     private int width;
     private int height;
 
+    public float getSimilarity(float sc1[], float sc2[], int dimension)
+    {
+        float result= 0f;
+        int i;
+        for(i=0;i<dimension;++i)
+        {
+            if(sc1[i]+sc2[i]!=0)
+                result= result + (sc1[i]-sc2[i])*(sc1[i]-sc2[i])/(sc1[i]+sc2[i]);
+        }
+        return result;
+    }
+
     /**
      * get the shape context of one image bitmap
+     * @param shapeContext new float[60]
+     * @param sobelThreshold for example 125
+     * @param boundaryMax for example 300
      */
     public void getShapeContext(Bitmap image, float shapeContext[], int sobelThreshold, int boundaryMax)
     {
@@ -19,17 +36,18 @@ public class Image
         boolean binary[] = new boolean[width * height];
         int coordinate[][] = new int[2][width * height];
         int coordinate2[][] = new int[2][boundaryMax];
-        image.getPixels(pixels, 0, width, 0, 0, width, height);
 
+        image.getPixels(pixels, 0, width, 0, 0, width, height);
         getGray(pixels, gray);
         pixels = null;
-
-        getBinaryBySobel(gray, binary, 125);
+        getBinaryBySobel(gray, binary, sobelThreshold);
         gray = null;
-
         int boundaryNum = trackBoundary(binary, coordinate);
-
-        int selectNum = selectBoundary(coordinate,coordinate2,boundaryNum,boundaryMax);
+        binary = null;
+        selectBoundary(coordinate,coordinate2,boundaryNum,boundaryMax);
+        calculateShapeContext(coordinate2,boundaryMax,shapeContext,CENTER_OF_BITMAP);
+        coordinate = null;
+        coordinate2 = null;
     }
 
     /**
@@ -77,6 +95,9 @@ public class Image
         }
     }
 
+    /**
+     * track the boundary of binary image,save the location of boundary in sequence
+     */
     private int trackBoundary(boolean binary[], int coordinate[][])
     {
         int boundaryNum = 0;
@@ -134,20 +155,85 @@ public class Image
         return boundaryNum;
     }
 
-    private int selectBoundary(int coordinate[][],int coordinate2[][], int num,int max)
+    /**
+     * select the boundary by a step=num/max
+     */
+    private void selectBoundary(int coordinate[][],int coordinate2[][], int num,int max)
     {
-        int selectNum = 0;
         int step=1;
-        if(num>max)step=(int)num/max;
+        if(num>max)step=num/max;
         int x,y;
-        for(int i=0;i<num;i=i+step)
+        for(int i=0;i<max;++i)
         {
-            x=coordinate[0][i];
-            y=coordinate[1][i];
-            coordinate2[0][selectNum]=x;
-            coordinate2[1][selectNum]=y;
-            selectNum++;
+            y=coordinate[0][i*step];
+            x=coordinate[1][i*step];
+            coordinate2[0][i]=y;
+            coordinate2[1][i]=x;
         }
-        return selectNum;
+    }
+
+    /**
+     * calculate the ShapeContext for one point(center of bitmap or mass center of boundary)
+     */
+    private void calculateShapeContext(int[][] coordinate2, int selectNum, float[] shapeContext, int centerModel)
+    {
+        int centerX=0,centerY=0;
+        int i,j,k;
+        if(centerModel == CENTER_OF_BITMAP)
+        {
+            centerX = width/2;
+            centerY = height/2;
+        }else if(centerModel == CENTER_OF_MASS)
+        {
+            for(i=0;i<selectNum;++i)
+            {
+                centerX=centerX+coordinate2[1][i];
+                centerY=centerY+coordinate2[0][i];
+            }
+            if(selectNum!=0)
+            {
+                centerX=centerX/selectNum;
+                centerY=centerY/selectNum;
+            }
+        }
+        //relative position radius and angle
+        float reP[][]=new float[2][selectNum];
+        float R=0,r;
+        int scHistogram[] = new int[5*12];
+        for(i=0;i<selectNum;++i)
+        {
+            reP[0][i]=(float)Math.sqrt((coordinate2[0][i]-centerX)*(coordinate2[0][i]-centerX)+(coordinate2[1][i]-centerY)*(coordinate2[1][i]-centerY));
+            reP[1][i]=(float)Math.toDegrees(Math.atan2(coordinate2[0][i]-centerY,coordinate2[1][i]-centerX));
+            if(reP[0][i]>R)R=reP[0][i];
+            if(coordinate2[0][i]<centerY && coordinate2[1][i]>centerX)reP[1][i]=0-reP[1][i];
+            else if(coordinate2[0][i]>centerY && coordinate2[1][i]>centerX)reP[1][i]=360-reP[1][i];
+            else reP[1][i]=180-reP[1][i];
+        }
+        r=R/5;
+        for(i=0;i<selectNum;++i)
+        {
+            for(k=0;k<5;++k)
+            {
+                if(reP[0][i]>=k*r && reP[0][i]<(k+1)*r)
+                {
+                    for(j=0;j<12;++j)
+                    {
+                        if(reP[1][i]>=j*30 && reP[1][i] <(j+1)*30)
+                        {
+                            scHistogram[j+k*12]++;
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+        //归一化
+        for(i=0;i<60;++i)
+        {
+            shapeContext[i]=(float)scHistogram[i]/selectNum;
+        }
+        reP=null;
+        scHistogram =null;
     }
 }
