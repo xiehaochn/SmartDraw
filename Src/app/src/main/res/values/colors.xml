@@ -5,5 +5,6 @@
     <color name="colorAccent">#000000</color>
     <color name="textColor">#8a8a8a</color>
 
-    <color name="stringColor">#CDAA7D</color>
+    <!--<color name="stringColor">#CDAA7D</color>-->
+    <color name="stringColor">#000000</color>
 </resources>
