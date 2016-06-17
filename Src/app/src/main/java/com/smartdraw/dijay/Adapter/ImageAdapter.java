@@ -23,6 +23,11 @@ public class ImageAdapter extends BaseAdapter
 
     private Context mContext;
 
+    public ImageAdapter(Context context)
+    {
+     this.mContext=context;
+    }
+
     @Override
     public int getCount()
     {
@@ -49,9 +54,7 @@ public class ImageAdapter extends BaseAdapter
 
         if(convertView==null){
             imageView=new ImageView(mContext);
-            imageView.setLayoutParams(new GridView.LayoutParams(ViewGroup.LayoutParams
-                    .WRAP_CONTENT, ViewGroup.LayoutParams
-                    .WRAP_CONTENT));
+            imageView.setLayoutParams(new GridView.LayoutParams(240, 240));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setPadding(8, 8, 8, 8);
         }else{

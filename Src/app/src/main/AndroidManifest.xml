@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.smartdraw" >
+          package="com.smartdraw" >
 
     <application
         android:allowBackup="true"
@@ -16,17 +16,22 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".dijay.Activity.more"
-            android:label="@string/app_name">
-        </activity>
+        <activity android:name=".dijay.Activity.MoreActivity"
+                  android:label="@string/app_name"/>
 
-        <activity android:name=".dijay.Activity.about">
 
-        </activity>
+        <activity android:name=".dijay.Activity.AboutActivity"/>
 
-        <activity android:name=".dijay.Activity.contact_us">
 
-        </activity>
+        <activity android:name=".dijay.Activity.ContactUsActivity"/>
+
+
+        <activity android:name=".dijay.Activity.SelectPictureActivity"/>
+
+        <activity android:name=".dijay.Activity.SketchpadActivity"/>
+
+        <activity android:name=".dijay.Activity.SkimPictureActivity"/>
+
     </application>
 
 </manifest>

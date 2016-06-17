@@ -17,9 +17,8 @@ public class ContactUsActivity extends BaseActivity
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
     {
-        setHideStatusBar (true);
         super.onCreate (savedInstanceState);
         setContentView (R.layout.activity_contact_us);
-        setNeedToolBar (true);
+
     }
 }
