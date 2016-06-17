@@ -12,7 +12,7 @@ import com.smartdraw.hawx.BaseActivity;
  * Name：Src
  * Description：
  */
-public class about extends BaseActivity
+public class AboutActivity extends BaseActivity
 {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)

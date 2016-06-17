@@ -5,11 +5,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toolbar;
 
 import com.smartdraw.R;
 import com.smartdraw.hawx.BaseActivity;
-
-import butterknife.BindView;
 
 /**
  * Author：DJ
@@ -17,12 +16,16 @@ import butterknife.BindView;
  * Name：Src
  * Description：
  */
-public class more extends BaseActivity
+public class MoreActivity extends BaseActivity
 {
-    @BindView(R.id.llAbout)
-    LinearLayout llAbout;
-    @BindView (R.id.llSuggestion)
-    LinearLayout llSuggestion;
+//    @BindView(R.id.llAbout)
+//    LinearLayout llAbout;
+//    @BindView (R.id.llSuggestion)
+//    LinearLayout llSuggestion;
+
+    private LinearLayout llAbout;
+    private LinearLayout llSuggestion;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
@@ -30,7 +33,12 @@ public class more extends BaseActivity
         setHideStatusBar (true);
         super.onCreate (savedInstanceState);
         setContentView (R.layout.activity_more);
-        setNeedToolBar (true);
+        setNeedToolBar (false);
+//        getIvBack().setVisibility(View.INVISIBLE);
+
+
+        llAbout = (LinearLayout) findViewById(R.id.llAbout);
+        llSuggestion = (LinearLayout) findViewById(R.id.llSuggestion);
 
         llAbout.setOnClickListener (new View.OnClickListener ()
         {
@@ -38,7 +46,7 @@ public class more extends BaseActivity
             public void onClick(View v)
             {
                 Intent intent = new Intent ();
-                intent.setClass (more.this, about.class);
+                intent.setClass (MoreActivity.this, about.class);
                 startActivity (intent);
             }
         });
@@ -49,7 +57,7 @@ public class more extends BaseActivity
             public void onClick(View v)
             {
                 Intent intent = new Intent ();
-                intent.setClass (more.this, contact_us.class);
+                intent.setClass (MoreActivity.this, contact_us.class);
                 startActivity (intent);
             }
         });
