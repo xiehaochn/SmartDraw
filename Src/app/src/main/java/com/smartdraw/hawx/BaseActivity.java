@@ -13,7 +13,7 @@ import android.view.WindowManager;
  */
 
 public class BaseActivity extends AppCompatActivity {
-    private boolean hideStatusBar=false;
+    private boolean hideStatusBar=true;
     private int version;
     private final int flags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
             | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -22,6 +22,7 @@ public class BaseActivity extends AppCompatActivity {
             | View.SYSTEM_UI_FLAG_FULLSCREEN
             | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
     private View decorView;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,9 +45,11 @@ public class BaseActivity extends AppCompatActivity {
                         WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             }
         }
+
     }
 
     public void setHideStatusBar(boolean hideStatusBar) {
         this.hideStatusBar = hideStatusBar;
     }
+
 }
