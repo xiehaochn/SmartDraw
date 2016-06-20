@@ -4,11 +4,14 @@ import android.graphics.Bitmap;
 
 public class ImageShanpeContext
 {
-    private static final int CENTER_OF_BITMAP = 0;
-    private static final int CENTER_OF_MASS = 1;
+    public static final int CENTER_OF_BITMAP = 0;
+    public static final int CENTER_OF_MASS = 1;
     private int width;
     private int height;
 
+    /**
+     * get the similarity between two shapecontext
+     */
     public float getSimilarity(float sc1[], float sc2[], int dimension)
     {
         float result= 0f;
@@ -16,7 +19,8 @@ public class ImageShanpeContext
         for(i=0;i<dimension;++i)
         {
             if(sc1[i]+sc2[i]!=0)
-                result= result + (sc1[i]-sc2[i])*(sc1[i]-sc2[i])/(sc1[i]+sc2[i]);
+                //result= result + (sc1[i]-sc2[i])*(sc1[i]-sc2[i])/(sc1[i]+sc2[i]);
+                result= result + Math.abs(sc1[i] - sc2[i]);
         }
         return result;
     }
@@ -24,10 +28,13 @@ public class ImageShanpeContext
     /**
      * get the shape context of one image bitmap
      * @param shapeContext new float[60]
-     * @param sobelThreshold for example 125
+     * @param sobelThreshold for example 125,but the OTSU may be the best TODO
      * @param boundaryMax for example 300
+     * @param centerModel CENTER_OF_BITMAP or CENTER_OF_MASS
+     * @return the final number of boundary
      */
-    public void getShapeContext(Bitmap image, float shapeContext[], int sobelThreshold, int boundaryMax)
+    public int getShapeContext(Bitmap image, float shapeContext[], int sobelThreshold,
+                                int boundaryMax, int centerModel)
     {
         width = image.getWidth();
         height = image.getHeight();
@@ -44,10 +51,26 @@ public class ImageShanpeContext
         gray = null;
         int boundaryNum = trackBoundary(binary, coordinate);
         binary = null;
-        selectBoundary(coordinate,coordinate2,boundaryNum,boundaryMax);
-        calculateShapeContext(coordinate2,boundaryMax,shapeContext,CENTER_OF_BITMAP);
+        int selectNum = selectBoundary(coordinate,coordinate2,boundaryNum,boundaryMax);
+        calculateShapeContext(coordinate2,selectNum,shapeContext,centerModel);
         coordinate = null;
         coordinate2 = null;
+
+        //test by show image
+//        for(int i=0;i<height;++i)
+//        {
+//            for(int j=0;j<width;++j)
+//            {
+//                pixels[i*width+j]=0xFFFFFFFF;
+//            }
+//        }
+//        for(int i=0;i<selectNum;++i)
+//        {
+//            pixels[coordinate2[0][i]*width+coordinate2[1][i]]=0x000000FF;
+//        }
+//        image.setPixels(pixels, 0, width, 0, 0, width, height);
+
+        return selectNum;
     }
 
     /**
@@ -158,17 +181,26 @@ public class ImageShanpeContext
     /**
      * select the boundary by a step=num/max
      */
-    private void selectBoundary(int coordinate[][],int coordinate2[][], int num,int max)
+    private int selectBoundary(int coordinate[][],int coordinate2[][], int num,int max)
     {
-        int step=1;
-        if(num>max)step=num/max;
-        int x,y;
-        for(int i=0;i<max;++i)
+        int i;
+        if(num>max)
         {
-            y=coordinate[0][i*step];
-            x=coordinate[1][i*step];
-            coordinate2[0][i]=y;
-            coordinate2[1][i]=x;
+            float step=num/max;
+            for(i=0;i<max;++i)
+            {
+                coordinate2[0][i]=coordinate[0][((int) (i * step))];
+                coordinate2[1][i]=coordinate[1][((int) (i * step))];
+            }
+            return max;
+        }else
+        {
+            for(i=0;i<num;++i)
+            {
+                coordinate2[0][i]=coordinate[0][i];
+                coordinate2[1][i]=coordinate[1][i];
+            }
+            return num;
         }
     }
 
@@ -177,6 +209,8 @@ public class ImageShanpeContext
      */
     private void calculateShapeContext(int[][] coordinate2, int selectNum, float[] shapeContext, int centerModel)
     {
+        if(selectNum==0) return;
+
         int centerX=0,centerY=0;
         int i,j,k;
         if(centerModel == CENTER_OF_BITMAP)
@@ -190,11 +224,8 @@ public class ImageShanpeContext
                 centerX=centerX+coordinate2[1][i];
                 centerY=centerY+coordinate2[0][i];
             }
-            if(selectNum!=0)
-            {
-                centerX=centerX/selectNum;
-                centerY=centerY/selectNum;
-            }
+            centerX=centerX/selectNum;
+            centerY=centerY/selectNum;
         }
         //relative position radius and angle
         float reP[][]=new float[2][selectNum];
