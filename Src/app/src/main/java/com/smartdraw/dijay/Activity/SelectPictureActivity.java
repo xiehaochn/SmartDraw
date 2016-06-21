@@ -5,9 +5,10 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageView;
 
 import com.smartdraw.R;
-import com.smartdraw.dijay.Adapter.ImageAdapter;
+import com.smartdraw.dijay.Adapter.SelectPictureAdapter;
 import com.smartdraw.hawx.BaseActivity;
 
 /**
@@ -27,8 +28,17 @@ public class SelectPictureActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_picture);
 
+        ImageView ivBack = (ImageView) findViewById (R.id.ivBack);
+        ivBack.setOnClickListener (new View.OnClickListener () {
+            @Override
+            public void onClick(View v)
+            {
+                finish ();
+            }
+        });
+
         gridView = (GridView) findViewById(R.id.gvPick_picture);
-        gridView.setAdapter(new ImageAdapter(this));
+        gridView.setAdapter(new SelectPictureAdapter (this));
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {

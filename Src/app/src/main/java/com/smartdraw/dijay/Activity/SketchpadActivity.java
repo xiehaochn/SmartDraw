@@ -25,5 +25,14 @@ public class SketchpadActivity extends BaseActivity
         ImageView ivMore = (ImageView) findViewById(R.id.ivMore);
         ivMore.setVisibility(View.VISIBLE);
 
+        ImageView ivBack = (ImageView) findViewById (R.id.ivBack);
+        ivBack.setOnClickListener (new View.OnClickListener () {
+            @Override
+            public void onClick(View v)
+            {
+                finish ();
+            }
+        });
+
     }
 }

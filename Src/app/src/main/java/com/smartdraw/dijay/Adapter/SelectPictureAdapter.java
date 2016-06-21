@@ -15,7 +15,7 @@ import com.smartdraw.R;
  * Name：Src
  * Description：
  */
-public class ImageAdapter extends BaseAdapter
+public class SelectPictureAdapter extends BaseAdapter
 {
     private int[] pictures = {R.drawable.apple1, R.drawable.elephant1, R.drawable.goose1, R
             .drawable.plane11, R.drawable.monkey51, R.drawable.car, R.drawable.melon, R.drawable
@@ -23,7 +23,7 @@ public class ImageAdapter extends BaseAdapter
 
     private Context mContext;
 
-    public ImageAdapter(Context context)
+    public SelectPictureAdapter(Context context)
     {
      this.mContext=context;
     }

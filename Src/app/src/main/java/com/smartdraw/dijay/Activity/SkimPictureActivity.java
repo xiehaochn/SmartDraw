@@ -2,6 +2,8 @@ package com.smartdraw.dijay.Activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.smartdraw.R;
 import com.smartdraw.hawx.BaseActivity;
@@ -19,5 +21,13 @@ public class SkimPictureActivity extends BaseActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_skim_picture);
+        ImageView ivBack = (ImageView) findViewById (R.id.ivBack);
+        ivBack.setOnClickListener (new View.OnClickListener () {
+            @Override
+            public void onClick(View v)
+            {
+                finish ();
+            }
+        });
     }
 }
