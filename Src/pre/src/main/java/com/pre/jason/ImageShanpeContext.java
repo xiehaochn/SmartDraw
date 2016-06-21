@@ -2,10 +2,22 @@ package com.pre.jason;
 
 import android.graphics.Bitmap;
 
+import java.util.List;
+
 public class ImageShanpeContext
 {
     public static final int CENTER_OF_BITMAP = 0;
     public static final int CENTER_OF_MASS = 1;
+
+    /**
+     * 1.there is assuming that the width of the reference bitmap(for hint)
+     * is bigger than the height of itself, so we can let the R_MAX to be width/2.
+     *
+     * 2.another assumption is the width of the doodleview bitmap is equal to the width of
+     * the reference bitmap
+    */
+    public static final int R_MAX_WIDTH = 0;
+    public static final int R_MAX_SELF = 1;
     private int width;
     private int height;
 
@@ -26,6 +38,20 @@ public class ImageShanpeContext
     }
 
     /**
+     * get shape contexts of many bitmaps
+     */
+    public void  getShapeContext(List<Bitmap> bitmaps, float shapeContext[][], int sobelThreshold,
+                               int boundaryMax, int centerModel,int radiusModel)
+    {
+        int i;
+        for(i=0;i<bitmaps.size();++i)
+        {
+            getShapeContext(bitmaps.get(i), shapeContext[i], sobelThreshold,
+                    boundaryMax, centerModel,radiusModel);
+        }
+    }
+
+    /**
      * get the shape context of one image bitmap
      * @param shapeContext new float[60]
      * @param sobelThreshold for example 125,but the OTSU may be the best TODO
@@ -34,7 +60,7 @@ public class ImageShanpeContext
      * @return the final number of boundary
      */
     public int getShapeContext(Bitmap image, float shapeContext[], int sobelThreshold,
-                                int boundaryMax, int centerModel)
+                                int boundaryMax, int centerModel,int radiusModel)
     {
         width = image.getWidth();
         height = image.getHeight();
@@ -52,7 +78,7 @@ public class ImageShanpeContext
         int boundaryNum = trackBoundary(binary, coordinate);
         binary = null;
         int selectNum = selectBoundary(coordinate,coordinate2,boundaryNum,boundaryMax);
-        calculateShapeContext(coordinate2,selectNum,shapeContext,centerModel);
+        calculateShapeContext(coordinate2,selectNum,shapeContext,centerModel,radiusModel);
         coordinate = null;
         coordinate2 = null;
 
@@ -207,7 +233,8 @@ public class ImageShanpeContext
     /**
      * calculate the ShapeContext for one point(center of bitmap or mass center of boundary)
      */
-    private void calculateShapeContext(int[][] coordinate2, int selectNum, float[] shapeContext, int centerModel)
+    private void calculateShapeContext(int[][] coordinate2, int selectNum, float[] shapeContext,
+                                       int centerModel, int radiusModel)
     {
         if(selectNum==0) return;
 
@@ -240,6 +267,8 @@ public class ImageShanpeContext
             else if(coordinate2[0][i]>centerY && coordinate2[1][i]>centerX)reP[1][i]=360-reP[1][i];
             else reP[1][i]=180-reP[1][i];
         }
+        if(radiusModel == R_MAX_WIDTH)
+            R = width/2;
         r=R/5;
         for(i=0;i<selectNum;++i)
         {

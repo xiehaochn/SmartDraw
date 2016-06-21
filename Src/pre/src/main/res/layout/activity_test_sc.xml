@@ -6,30 +6,37 @@
     android:orientation="vertical">
 
     <View
-    android:layout_width="match_parent"
-    android:layout_height="50dp"
-    android:background="#00aaaa"/>
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#00aaaa"/>
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="get"/>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
+
         <ImageView
             android:id="@+id/iv_after"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"/>
 
         <com.pre.DoodleView
             android:id="@+id/doodleView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"/>
     </FrameLayout>
 
     <View
-    android:layout_width="match_parent"
-    android:layout_height="50dp"
-    android:layout_alignParentBottom="true"
-    android:background="#880088"/>
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="#880088"/>
 
 
 </LinearLayout>
