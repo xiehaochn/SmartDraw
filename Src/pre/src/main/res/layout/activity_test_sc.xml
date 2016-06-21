@@ -24,7 +24,11 @@
         <ImageView
             android:id="@+id/iv_after"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:background="#999999"
+            android:src="@drawable/fish4"
+            android:layout_gravity="center_vertical"
+            android:scaleType="fitCenter"/>
 
         <com.pre.DoodleView
             android:id="@+id/doodleView"

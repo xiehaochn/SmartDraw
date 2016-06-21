@@ -1,11 +1,14 @@
 package com.pre.jason;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import java.util.List;
 
-public class ImageShanpeContext
+public class ImageShapeContext
 {
+    private static String DEBUG = "Image_Shape_Context";
+
     public static final int CENTER_OF_BITMAP = 0;
     public static final int CENTER_OF_MASS = 1;
 
@@ -20,6 +23,36 @@ public class ImageShanpeContext
     public static final int R_MAX_SELF = 1;
     private int width;
     private int height;
+
+    /**
+     * get the similarity number from several shapecontexts
+     */
+    public int getSimilarityNumber(float sc1[], float sc2[][], int dimension)
+    {
+        int result = -1;
+        int i;
+        float similarity[] = new float[sc2.length];
+        float min= Integer.MAX_VALUE;
+        for(i=0;i<sc2.length;++i)
+        {
+            similarity[i] = getSimilarity(sc1, sc2[i], dimension);
+            if(i==0)
+            {
+                min = similarity[i];
+                result = i;
+            }
+            else
+            {
+                if (min>similarity[i])
+                {
+                    min = similarity[i];
+                    result = i;
+                }
+            }
+            Log.d(DEBUG, "similarity" + i + ": "+similarity[i]);
+        }
+        return result+1;
+    }
 
     /**
      * get the similarity between two shapecontext
@@ -39,6 +72,9 @@ public class ImageShanpeContext
 
     /**
      * get shape contexts of many bitmaps
+     * @param sobelThreshold for example 125,but the OTSU may be the best TODO
+     * @param boundaryMax for example 300
+     * @param centerModel CENTER_OF_BITMAP or CENTER_OF_MASS
      */
     public void  getShapeContext(List<Bitmap> bitmaps, float shapeContext[][], int sobelThreshold,
                                int boundaryMax, int centerModel,int radiusModel)
@@ -256,19 +292,21 @@ public class ImageShanpeContext
         }
         //relative position radius and angle
         float reP[][]=new float[2][selectNum];
-        float R=0,r;
+        float R_max=0,R,r;
         int scHistogram[] = new int[5*12];
         for(i=0;i<selectNum;++i)
         {
             reP[0][i]=(float)Math.sqrt((coordinate2[0][i]-centerX)*(coordinate2[0][i]-centerX)+(coordinate2[1][i]-centerY)*(coordinate2[1][i]-centerY));
             reP[1][i]=(float)Math.toDegrees(Math.atan2(coordinate2[0][i]-centerY,coordinate2[1][i]-centerX));
-            if(reP[0][i]>R)R=reP[0][i];
+            if(reP[0][i]>R_max)R_max=reP[0][i];
             if(coordinate2[0][i]<centerY && coordinate2[1][i]>centerX)reP[1][i]=0-reP[1][i];
             else if(coordinate2[0][i]>centerY && coordinate2[1][i]>centerX)reP[1][i]=360-reP[1][i];
             else reP[1][i]=180-reP[1][i];
         }
         if(radiusModel == R_MAX_WIDTH)
             R = width/2;
+        else
+            R = R_max;
         r=R/5;
         for(i=0;i<selectNum;++i)
         {

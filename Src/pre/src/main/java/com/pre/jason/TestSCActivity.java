@@ -1,29 +1,26 @@
 package com.pre.jason;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 
 import com.pre.DoodleView;
 import com.pre.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TestSCActivity extends AppCompatActivity
 {
     private ImageView iv_after;
     private DoodleView doodleView;
     private Button mButton;
-    private Bitmap bitmap1;
-    private Bitmap bitmap2;
-    private Bitmap bitmap3;
-    private Bitmap bitmap4;
+    private List<Bitmap> bitmaps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -35,22 +32,17 @@ public class TestSCActivity extends AppCompatActivity
         mButton = (Button) findViewById(R.id.button);
 
         BitmapFactory.Options opts=new BitmapFactory.Options();
-        bitmap1= BitmapFactory.decodeResource(getResources(), R.drawable.fish1, opts);
-        bitmap2= BitmapFactory.decodeResource(getResources(), R.drawable.fish2, opts);
-        bitmap3= BitmapFactory.decodeResource(getResources(), R.drawable.fish3, opts);
-        bitmap4= BitmapFactory.decodeResource(getResources(), R.drawable.fish4, opts);
+        Bitmap bitmap1= BitmapFactory.decodeResource(getResources(), R.drawable.fish1, opts);
+        Bitmap bitmap2= BitmapFactory.decodeResource(getResources(), R.drawable.fish2, opts);
+        Bitmap bitmap3= BitmapFactory.decodeResource(getResources(), R.drawable.fish3, opts);
+        Bitmap bitmap4= BitmapFactory.decodeResource(getResources(), R.drawable.fish4, opts);
+        bitmaps = new ArrayList<>();
+        bitmaps.add(bitmap1);
+        bitmaps.add(bitmap2);
+        bitmaps.add(bitmap3);
+        bitmaps.add(bitmap4);
 //        Bitmap bitmap = bitmap4.copy(bitmap4.getConfig(),true);
         iv_after.setImageBitmap(bitmap4);
-        Log.d("dug", bitmap4.getWidth() + "");
-        Log.d("dug",bitmap4.getHeight()+"");
-
-        DisplayMetrics metric = new DisplayMetrics();
-        WindowManager wm = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
-        wm.getDefaultDisplay().getMetrics(metric);
-        int mScreenWidth = metric.widthPixels;
-        int mScreenHeight = metric.heightPixels;
-        Log.d("dug", mScreenWidth + "");
-        Log.d("dug", mScreenHeight + "");
 
         mButton.setOnClickListener(new View.OnClickListener()
         {
@@ -58,8 +50,16 @@ public class TestSCActivity extends AppCompatActivity
             public void onClick(View v)
             {
                 Bitmap bitmap = doodleView.getBitmap();
-                Log.d("dug", bitmap.getWidth() + "");
-                Log.d("dug",bitmap.getHeight()+"");
+                ImageShapeContext isc = new ImageShapeContext();
+                float sc2[][] = new float[bitmaps.size()][60];
+                isc.getShapeContext(bitmaps, sc2, 125, 300, ImageShapeContext.CENTER_OF_BITMAP,
+                        ImageShapeContext.R_MAX_WIDTH);
+                float sc1[] = new float[60];
+                isc.getShapeContext(bitmap, sc1, 125, 300, ImageShapeContext.CENTER_OF_BITMAP,
+                        ImageShapeContext.R_MAX_WIDTH);
+                int like = isc.getSimilarityNumber(sc1,sc2,60);
+                Log.d("debug",like+"");
+
             }
         });
 
