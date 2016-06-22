@@ -18,6 +18,7 @@ import java.util.List;
 public class TestSCActivity extends AppCompatActivity
 {
     private ImageView iv_after;
+    private ImageView iv_show;
     private DoodleView doodleView;
     private Button mButton;
     private List<Bitmap> bitmaps;
@@ -29,6 +30,7 @@ public class TestSCActivity extends AppCompatActivity
         setContentView(R.layout.activity_test_sc);
         iv_after = (ImageView) findViewById(R.id.iv_after);
         doodleView = (DoodleView) findViewById(R.id.doodleView);
+//        iv_show = (ImageView) findViewById(R.id.iv_show);
         mButton = (Button) findViewById(R.id.button);
 
         BitmapFactory.Options opts=new BitmapFactory.Options();
@@ -36,13 +38,34 @@ public class TestSCActivity extends AppCompatActivity
         Bitmap bitmap2= BitmapFactory.decodeResource(getResources(), R.drawable.fish2, opts);
         Bitmap bitmap3= BitmapFactory.decodeResource(getResources(), R.drawable.fish3, opts);
         Bitmap bitmap4= BitmapFactory.decodeResource(getResources(), R.drawable.fish4, opts);
+
         bitmaps = new ArrayList<>();
-        bitmaps.add(bitmap1);
-        bitmaps.add(bitmap2);
-        bitmaps.add(bitmap3);
-        bitmaps.add(bitmap4);
-//        Bitmap bitmap = bitmap4.copy(bitmap4.getConfig(),true);
-        iv_after.setImageBitmap(bitmap4);
+        Bitmap bitmap11 = bitmap1.copy(bitmap1.getConfig(), true);
+        Bitmap bitmap12 = bitmap2.copy(bitmap2.getConfig(), true);
+        Bitmap bitmap13 = bitmap3.copy(bitmap3.getConfig(), true);
+        Bitmap bitmap14 = bitmap4.copy(bitmap4.getConfig(), true);
+        bitmaps.add(bitmap11);
+        bitmaps.add(bitmap12);
+        bitmaps.add(bitmap13);
+        bitmaps.add(bitmap14);
+
+        final ImageShapeContext isc = new ImageShapeContext();
+        final float sc2[][] = new float[bitmaps.size()][60];
+        isc.getShapeContext(bitmaps, sc2, 125, 3000, ImageShapeContext.CENTER_OF_MASS,
+                ImageShapeContext.R_MAX_SELF);
+
+        iv_after.setImageBitmap(bitmap14);
+
+//        Log.d("debug", "bitmap4 height:" + bitmap4.getHeight());
+//        Log.d("debug", "bitmap4 width:" + bitmap4.getWidth());
+//
+//        DisplayMetrics metric = new DisplayMetrics();
+//        WindowManager wm = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
+//        wm.getDefaultDisplay().getMetrics(metric);
+//        Log.d("debug", "window height:" + metric.heightPixels);
+//        Log.d("debug", "window width:" + metric.widthPixels);
+//        Log.d("debug", "window density:" + metric.density);
+//        Log.d("debug", "window dpi:" + metric.densityDpi);
 
         mButton.setOnClickListener(new View.OnClickListener()
         {
@@ -50,35 +73,20 @@ public class TestSCActivity extends AppCompatActivity
             public void onClick(View v)
             {
                 Bitmap bitmap = doodleView.getBitmap();
-                ImageShapeContext isc = new ImageShapeContext();
-                float sc2[][] = new float[bitmaps.size()][60];
-                isc.getShapeContext(bitmaps, sc2, 125, 300, ImageShapeContext.CENTER_OF_BITMAP,
-                        ImageShapeContext.R_MAX_WIDTH);
+
                 float sc1[] = new float[60];
-                isc.getShapeContext(bitmap, sc1, 125, 300, ImageShapeContext.CENTER_OF_BITMAP,
-                        ImageShapeContext.R_MAX_WIDTH);
+                isc.getShapeContext(bitmap, sc1, 125, 3000, ImageShapeContext.CENTER_OF_MASS,
+                        ImageShapeContext.R_MAX_SELF);
                 int like = isc.getSimilarityNumber(sc1,sc2,60);
-                Log.d("debug",like+"");
+//                iv_show.setImageBitmap(bitmap);
+                Log.d("debug", like + "");
+//                Log.d("debug", "imageview height:" + iv_after.getHeight());
+//                Log.d("debug","imageview width:"+iv_after.getWidth());
+//                Log.d("debug", "doodleView height:" + doodleView.getHeight());
+//                Log.d("debug","doodleView width:"+doodleView.getWidth());
+
 
             }
         });
-
-
-//
-//        float sc[][] = new float[4][60];
-//        ImageShanpeContext isc = new ImageShanpeContext();
-//        isc.getShapeContext(bitmap1,sc[0],125,300,ImageShanpeContext.CENTER_OF_BITMAP);
-//        isc.getShapeContext(bitmap2,sc[1],125,300,ImageShanpeContext.CENTER_OF_BITMAP);
-//        isc.getShapeContext(bitmap3,sc[2],125,300,ImageShanpeContext.CENTER_OF_BITMAP);
-//        isc.getShapeContext(bitmap4,sc[3],125,300,ImageShanpeContext.CENTER_OF_BITMAP);
-//
-//        float result[] = new float[3];
-//        for(int i=1;i<4;i++)
-//        {
-//            result[i-1]=isc.getSimilarity(sc[0],sc[i],60);
-//        }
-//        Log.d("result", "0-1 " + result[0]);
-//        Log.d("result","0-2 "+result[1]);
-//        Log.d("result","0-3 "+result[2]);
     }
 }

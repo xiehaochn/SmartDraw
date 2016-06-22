@@ -7,7 +7,7 @@ import java.util.List;
 
 public class ImageShapeContext
 {
-    private static String DEBUG = "Image_Shape_Context";
+    private static String DEBUG_LOG = "Image_Shape_Context";
 
     public static final int CENTER_OF_BITMAP = 0;
     public static final int CENTER_OF_MASS = 1;
@@ -49,9 +49,9 @@ public class ImageShapeContext
                     result = i;
                 }
             }
-            Log.d(DEBUG, "similarity" + i + ": "+similarity[i]);
+            Log.d(DEBUG_LOG, "similarity" + i + ": "+similarity[i]);
         }
-        return result+1;
+        return result;
     }
 
     /**
@@ -72,7 +72,7 @@ public class ImageShapeContext
 
     /**
      * get shape contexts of many bitmaps
-     * @param sobelThreshold for example 125,but the OTSU may be the best TODO
+     * @param sobelThreshold for example 125
      * @param boundaryMax for example 300
      * @param centerModel CENTER_OF_BITMAP or CENTER_OF_MASS
      */
@@ -90,7 +90,7 @@ public class ImageShapeContext
     /**
      * get the shape context of one image bitmap
      * @param shapeContext new float[60]
-     * @param sobelThreshold for example 125,but the OTSU may be the best TODO
+     * @param sobelThreshold for example 125
      * @param boundaryMax for example 300
      * @param centerModel CENTER_OF_BITMAP or CENTER_OF_MASS
      * @return the final number of boundary
@@ -126,9 +126,9 @@ public class ImageShapeContext
 //                pixels[i*width+j]=0xFFFFFFFF;
 //            }
 //        }
-//        for(int i=0;i<selectNum;++i)
+//        for(int i=0;i<boundaryNum;++i)
 //        {
-//            pixels[coordinate2[0][i]*width+coordinate2[1][i]]=0x000000FF;
+//            pixels[coordinate[0][i]*width+coordinate[1][i]]=0x000000FF;
 //        }
 //        image.setPixels(pixels, 0, width, 0, 0, width, height);
 
@@ -137,6 +137,11 @@ public class ImageShapeContext
 
     /**
      * get the gray image for the pixels of one image
+     * the gray should be binaried by one Threshold
+     * (there just set the threshold 200, but the OTSU may be the best),
+     * that can improve the result of {@link #getBinaryBySobel}
+     *
+     * @see #getBinaryBySobel(int[],boolean[],int)
      */
     private void getGray(int pixels[], int gray[])
     {
@@ -151,7 +156,13 @@ public class ImageShapeContext
                 green = ((value & 0x0000FF00) >> 8);
                 blue = (value & 0x000000FF);
                 temp = (int) ((float) red * 0.299 + (float) green * 0.587 + (float) blue * 0.114);
-                gray[i * width + j] = temp;
+                if(temp<200)
+                {
+                    gray[i * width + j] = 0;
+                }else
+                {
+                    gray[i * width + j] = 255;
+                }
             }
         }
     }
@@ -296,7 +307,7 @@ public class ImageShapeContext
         int scHistogram[] = new int[5*12];
         for(i=0;i<selectNum;++i)
         {
-            reP[0][i]=(float)Math.sqrt((coordinate2[0][i]-centerX)*(coordinate2[0][i]-centerX)+(coordinate2[1][i]-centerY)*(coordinate2[1][i]-centerY));
+            reP[0][i]=(float)Math.sqrt((coordinate2[0][i]-centerY)*(coordinate2[0][i]-centerY)+(coordinate2[1][i]-centerX)*(coordinate2[1][i]-centerX));
             reP[1][i]=(float)Math.toDegrees(Math.atan2(coordinate2[0][i]-centerY,coordinate2[1][i]-centerX));
             if(reP[0][i]>R_max)R_max=reP[0][i];
             if(coordinate2[0][i]<centerY && coordinate2[1][i]>centerX)reP[1][i]=0-reP[1][i];
