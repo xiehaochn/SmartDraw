@@ -10,6 +10,9 @@ import android.widget.LinearLayout;
 import com.smartdraw.R;
 import com.smartdraw.hawx.BaseActivity;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Author：DJ
  * Time：2016/6/17 17:14
@@ -18,14 +21,12 @@ import com.smartdraw.hawx.BaseActivity;
  */
 public class MoreActivity extends BaseActivity implements View.OnClickListener
 {
-//    @BindView(R.id.llAbout)
-//    LinearLayout llAbout;
-//    @BindView (R.id.llSuggestion)
-//    LinearLayout llSuggestion;
-
-    private LinearLayout llAbout;
-    private LinearLayout llSuggestion;
-    private ImageView ivBack;
+    @BindView(R.id.llAbout)
+    LinearLayout llAbout;
+    @BindView (R.id.llSuggestion)
+    LinearLayout llSuggestion;
+    @BindView(R.id.ivBack)
+    ImageView ivBack;
 
 
     @Override
@@ -33,8 +34,7 @@ public class MoreActivity extends BaseActivity implements View.OnClickListener
     {
         super.onCreate (savedInstanceState);
         setContentView (R.layout.activity_more);
-
-
+        ButterKnife.bind (this);
 
         llAbout = (LinearLayout) findViewById(R.id.llAbout);
         llSuggestion = (LinearLayout) findViewById(R.id.llSuggestion);

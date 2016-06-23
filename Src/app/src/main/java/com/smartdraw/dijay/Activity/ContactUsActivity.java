@@ -22,12 +22,15 @@ public class ContactUsActivity extends BaseActivity
         super.onCreate (savedInstanceState);
         setContentView (R.layout.activity_contact_us);
         ImageView ivBack = (ImageView) findViewById (R.id.ivBack);
-        ivBack.setOnClickListener (new View.OnClickListener () {
-            @Override
-            public void onClick(View v)
-            {
-                finish ();
-            }
-        });
+        if (ivBack != null)
+        {
+            ivBack.setOnClickListener (new View.OnClickListener () {
+                @Override
+                public void onClick(View v)
+                {
+                    finish ();
+                }
+            });
+        }
     }
 }

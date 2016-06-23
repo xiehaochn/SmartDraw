@@ -23,12 +23,15 @@ public class AboutActivity extends BaseActivity
         super.onCreate (savedInstanceState);
         setContentView (R.layout.activity_about);
         ImageView ivBack = (ImageView) findViewById (R.id.ivBack);
-        ivBack.setOnClickListener (new View.OnClickListener () {
-            @Override
-            public void onClick(View v)
-            {
-                finish ();
-            }
-        });
+        if (ivBack != null)
+        {
+            ivBack.setOnClickListener (new View.OnClickListener () {
+                @Override
+                public void onClick(View v)
+                {
+                    finish ();
+                }
+            });
+        }
     }
 }

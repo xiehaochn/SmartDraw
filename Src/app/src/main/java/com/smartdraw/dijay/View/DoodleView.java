@@ -1,4 +1,4 @@
-package com.smartdraw;
+package com.smartdraw.dijay.View;
 
 import android.content.Context;
 import android.graphics.Bitmap;
