@@ -18,6 +18,7 @@
             android:layout_height="match_parent" />
 
         <com.smartdraw.dijay.View.DoodleView
+            android:id="@+id/doodleView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 

@@ -6,4 +6,5 @@
     <dimen name="default_elevation">7dp</dimen>
 
     <dimen name="sketchpad_button_space">5dp</dimen>
+
 </resources>

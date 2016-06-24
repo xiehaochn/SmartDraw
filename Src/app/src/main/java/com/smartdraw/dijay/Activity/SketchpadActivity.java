@@ -2,11 +2,16 @@ package com.smartdraw.dijay.Activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -14,6 +19,7 @@ import android.widget.SimpleAdapter;
 
 import com.smartdraw.R;
 import com.smartdraw.dijay.View.BaseDialog;
+import com.smartdraw.dijay.View.DoodleView;
 import com.smartdraw.hawx.BaseActivity;
 
 import java.util.ArrayList;
@@ -32,6 +38,12 @@ public class SketchpadActivity extends BaseActivity
     public static boolean INIT_STATUS = true;
     private int position;
     private PopupWindow pop;
+
+    private DoodleView doodleView;
+    private ImageButton eraser;
+    private ImageButton pen;
+
+//    private  int setcolortemp;
 
     List<Map<String, String>> moreList;
     private ListView lvPopupList;// popupwindow中的ListView
@@ -64,7 +76,7 @@ public class SketchpadActivity extends BaseActivity
                         pop.dismiss ();
                     } else
                     {
-                        pop.showAsDropDown (ivMore, 0, 0);
+                        pop.showAsDropDown (ivMore, 50, 0);
                     }
                 }
             });
@@ -83,6 +95,13 @@ public class SketchpadActivity extends BaseActivity
                 }
             });
         }
+
+        doodleView=(DoodleView) findViewById(R.id.doodleView);
+//        setcolortemp=doodleView.paintColor;
+        pen=(ImageButton) findViewById(R.id.pen);
+        eraser=(ImageButton) findViewById(R.id.eraser);
+        pen.setEnabled(false);
+        eraser.setEnabled(true);
 
         initData();
 
@@ -142,10 +161,10 @@ public class SketchpadActivity extends BaseActivity
             }
         });
 
-        // 控制popupwindow的宽度和高度自适应
+//         控制popupwindow的宽度和高度自适应
         lvPopupList.measure(View.MeasureSpec.UNSPECIFIED,
                 View.MeasureSpec.UNSPECIFIED);
-        pop.setWidth(lvPopupList.getMeasuredWidth());
+        pop.setWidth(lvPopupList.getMeasuredWidth()-15);
         pop.setHeight((lvPopupList.getMeasuredHeight() + 20)
                 * NUM_OF_VISIBLE_LIST_ROWS);
 
@@ -180,6 +199,55 @@ public class SketchpadActivity extends BaseActivity
                 selectDialog.dismiss ();
             }
         });
+    }
+
+    public void pen(View view)
+    {
+        doodleView.setPaintColor(doodleView.paintColor);
+        doodleView.setPaintWidth(doodleView.paintWidth);
+        doodleView.setPaintmode_pen();
+        pen.setEnabled(false);
+        eraser.setEnabled(true);
+    }
+    public void eraser(View view)
+    {
+        doodleView.setPaintmode_eraser();
+        doodleView.setPaintColor(Color.WHITE);
+        pen.setEnabled(true);
+        eraser.setEnabled(false);
+    }
+    public void undo(View view)
+    {
+        doodleView.undo();
+    }
+    public void redo(View view)
+    {
+        doodleView.redo();
+    }
+    public void clear(View view)
+    {
+        doodleView.bitmapClear();
+    }
+    public void color(View view)
+    {
+        showColorDialog();
+    }
+    public void save(View view)
+    {
+        MediaScannerConnection.scanFile(this, new String[]{
+                        Environment.getExternalStorageDirectory().getAbsolutePath()},
+                null, new MediaScannerConnection.OnScanCompletedListener()
+                {
+                    public void onScanCompleted(String path, Uri uri)
+                    {
+
+                    }
+                });
+    }
+
+    private void showColorDialog()
+    {
+
     }
 
     @Override
