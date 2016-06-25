@@ -5,13 +5,8 @@ import android.util.Log;
 
 import java.util.List;
 
-public class ImageShapeContext
+public class ImageShapeContextPre
 {
-    private static boolean DEBUG = true;
-    public static void setDEBUG(boolean DEBUG)
-    {
-        ImageShapeContext.DEBUG = DEBUG;
-    }
     private static String DEBUG_LOG = "Image_Shape_Context";
 
     public static final int CENTER_OF_BITMAP = 0;
@@ -19,19 +14,12 @@ public class ImageShapeContext
 
     /**
      * 1.there is assuming that the width of the reference bitmap(for hint)
-     * is bigger than the height of itself, so we can let the R_MAX to be width/2.<br>
+     * is bigger than the height of itself, so we can let the R_MAX to be width/2.
      *
      * 2.another assumption is the width of the doodleview bitmap is equal to the width of
-     * the hit bitmap.(however the hint bitmap showed in the imageview will be scaled at the
-     * scaleType="fitCenter", so the width of the doodelview will not be equal to the
-     * width of the hint bitmap in most cases. Luckily the shapecontext of R_MAX_WIDTH
-     * is expanded invariant)
-     *
+     * the reference bitmap
     */
     public static final int R_MAX_WIDTH = 0;
-    /**
-     * the shapecontext of R_MAX_SELF is expanded and translated invariant
-     */
     public static final int R_MAX_SELF = 1;
     private int width;
     private int height;
@@ -61,10 +49,7 @@ public class ImageShapeContext
                     result = i;
                 }
             }
-            if(DEBUG)
-            {
-                Log.d(DEBUG_LOG, "similarity" + i + ": " + similarity[i]);
-            }
+            Log.d(DEBUG_LOG, "similarity" + i + ": "+similarity[i]);
         }
         return result;
     }
@@ -97,13 +82,8 @@ public class ImageShapeContext
         int i;
         for(i=0;i<bitmaps.size();++i)
         {
-            int boundaryNum = getShapeContext(bitmaps.get(i), shapeContext[i], sobelThreshold,
+            getShapeContext(bitmaps.get(i), shapeContext[i], sobelThreshold,
                     boundaryMax, centerModel,radiusModel);
-            if(DEBUG)
-            {
-                Log.d(DEBUG_LOG, "boundaryNum" + i + ": " + boundaryNum);
-            }
-
         }
     }
 
@@ -124,25 +104,44 @@ public class ImageShapeContext
         int gray[] = new int[width * height];
         boolean binary[] = new boolean[width * height];
         int coordinate[][] = new int[2][width * height];
+        int coordinate2[][] = new int[2][boundaryMax];
 
         image.getPixels(pixels, 0, width, 0, 0, width, height);
         getGray(pixels, gray);
         pixels = null;
-        int boundaryNum = getBinaryBySobel(gray, binary, coordinate, sobelThreshold);
+        getBinaryBySobel(gray, binary, sobelThreshold);
         gray = null;
-        calculateShapeContext(coordinate,boundaryNum,shapeContext,centerModel,radiusModel);
+        int boundaryNum = trackBoundary(binary, coordinate);
+        binary = null;
+        int selectNum = selectBoundary(coordinate,coordinate2,boundaryNum,boundaryMax);
+        calculateShapeContext(coordinate2,selectNum,shapeContext,centerModel,radiusModel);
         coordinate = null;
+        coordinate2 = null;
 
-        return boundaryNum;
+        //test by show image
+//        for(int i=0;i<height;++i)
+//        {
+//            for(int j=0;j<width;++j)
+//            {
+//                pixels[i*width+j]=0xFFFFFFFF;
+//            }
+//        }
+//        for(int i=0;i<boundaryNum;++i)
+//        {
+//            pixels[coordinate[0][i]*width+coordinate[1][i]]=0x000000FF;
+//        }
+//        image.setPixels(pixels, 0, width, 0, 0, width, height);
+
+        return selectNum;
     }
 
     /**
      * get the gray image for the pixels of one image
      * the gray should be binaried by one Threshold
-     * (TODO:there just set the threshold 200, but the OTSU may be the best),
+     * (there just set the threshold 200, but the OTSU may be the best),
      * that can improve the result of {@link #getBinaryBySobel}
      *
-     * @see #getBinaryBySobel(int[],boolean[],int[][],int)
+     * @see #getBinaryBySobel(int[],boolean[],int)
      */
     private void getGray(int pixels[], int gray[])
     {
@@ -173,9 +172,8 @@ public class ImageShapeContext
      * notice that the boundary of the binary is invalid value,
      * because not calculate for the boundary
      */
-    private int getBinaryBySobel(int gray[], boolean binary[], int coordinate[][], int threshold)
+    private void getBinaryBySobel(int gray[], boolean binary[], int threshold)
     {
-        int boundaryNum=0;
         int gradientX, gradientY, gradient;
         for (int i = 1; i < height - 1; i++)
         {
@@ -188,25 +186,104 @@ public class ImageShapeContext
                         + gray[width * (i + 1) + j + 1]) - (gray[width * (i - 1) + j - 1] +
                         2 * gray[width * i + j - 1] + gray[width * (i + 1) + j - 1]));
                 gradient = gradientX + gradientY;
-                if(gradient > threshold)
-                {
-                    binary[width * i + j] = true;
-                    coordinate[0][boundaryNum]=i;
-                    coordinate[1][boundaryNum]=j;
-                    boundaryNum++;
-                }
+                binary[width * i + j] = (gradient > threshold);
             }
+        }
+    }
+
+    /**
+     * track the boundary of binary image,save the location of boundary in sequence
+     */
+    private int trackBoundary(boolean binary[], int coordinate[][])
+    {
+        int boundaryNum = 0;
+        boolean []flag = new boolean[width * height];
+        int i=0,j=0;
+        int flag_i,flag_j;
+        while(i<height&&j<width)
+        {
+            while(!((binary[width*i+j])&&(!flag[width*i+j])))
+            {
+                j++;
+                if(j==width){j=0;i++;}if(i==height)break;
+            }
+            if(i==height)break;
+            flag_i=i;flag_j=j;
+            flag[width*i+j]=true;
+            coordinate[0][boundaryNum]=i;
+            coordinate[1][boundaryNum]=j;
+            boundaryNum++;
+            //because the boundary of the binary is invalid value,
+            //it need not to check break for i and j
+            while((binary[width*i+j+1])&&(!flag[width*i+j+1])
+                    || (binary[width*(i+1)+j+1])&&(!flag[width*(i+1)+j])
+                    || (binary[width*(i+1)+j])&&(!flag[width*(i+1)+j])
+                    || (binary[width*(i+1)+j-1])&&(!flag[width*(i+1)+j])
+                    || (binary[width*i+j-1])&&(!flag[width*i+j-1]))
+            {
+                if(binary[width*i+j+1])
+                {
+                    j++;
+                }
+                else if(binary[width*(i+1)+j+1])
+                {
+                    i++;j++;
+                }
+                else if(binary[width*(i+1)+j])
+                {
+                    i++;
+                }
+                else if(binary[width*(i+1)+j-1])
+                {
+                    i++;j--;
+                }
+                else
+                {
+                    j--;
+                }
+                flag[width*i+j]=true;
+                coordinate[0][boundaryNum]=i;
+                coordinate[1][boundaryNum]=j;
+                boundaryNum++;
+            }
+            i=flag_i;j=flag_j+1;if(j==width){j=0;i++;}if(i==height)break;
         }
         return boundaryNum;
     }
 
     /**
+     * select the boundary by a step=num/max
+     */
+    private int selectBoundary(int coordinate[][],int coordinate2[][], int num,int max)
+    {
+        int i;
+        if(num>max)
+        {
+            float step=num/max;
+            for(i=0;i<max;++i)
+            {
+                coordinate2[0][i]=coordinate[0][((int) (i * step))];
+                coordinate2[1][i]=coordinate[1][((int) (i * step))];
+            }
+            return max;
+        }else
+        {
+            for(i=0;i<num;++i)
+            {
+                coordinate2[0][i]=coordinate[0][i];
+                coordinate2[1][i]=coordinate[1][i];
+            }
+            return num;
+        }
+    }
+
+    /**
      * calculate the ShapeContext for one point(center of bitmap or mass center of boundary)
      */
-    private void calculateShapeContext(int[][] coordinate, int boundaryNum, float[] shapeContext,
+    private void calculateShapeContext(int[][] coordinate2, int selectNum, float[] shapeContext,
                                        int centerModel, int radiusModel)
     {
-        if(boundaryNum==0) return;
+        if(selectNum==0) return;
 
         int centerX=0,centerY=0;
         int i,j,k;
@@ -216,28 +293,27 @@ public class ImageShapeContext
             centerY = height/2;
         }else if(centerModel == CENTER_OF_MASS)
         {
-            for(i=0;i<boundaryNum;++i)
+            for(i=0;i<selectNum;++i)
             {
-                centerX=centerX+coordinate[1][i];
-                centerY=centerY+coordinate[0][i];
+                centerX=centerX+coordinate2[1][i];
+                centerY=centerY+coordinate2[0][i];
             }
-            centerX=centerX/boundaryNum;
-            centerY=centerY/boundaryNum;
+            centerX=centerX/selectNum;
+            centerY=centerY/selectNum;
         }
         //relative position radius and angle
-        float reP[][]=new float[2][boundaryNum];
+        float reP[][]=new float[2][selectNum];
         float R_max=0,R,r;
         int scHistogram[] = new int[5*12];
-        for(i=0;i<boundaryNum;++i)
+        for(i=0;i<selectNum;++i)
         {
-            reP[0][i]=(float)Math.sqrt((coordinate[0][i]-centerY)*(coordinate[0][i]-centerY)+
-                    (coordinate[1][i]-centerX)*(coordinate[1][i]-centerX));
-            reP[1][i]=(float)Math.toDegrees(Math.atan2(coordinate[0][i]-centerY,coordinate[1][i]-centerX));
+            reP[0][i]=(float)Math.sqrt((coordinate2[0][i]-centerY)*(coordinate2[0][i]-centerY)+(coordinate2[1][i]-centerX)*(coordinate2[1][i]-centerX));
+            reP[1][i]=(float)Math.toDegrees(Math.atan2(coordinate2[0][i]-centerY,coordinate2[1][i]-centerX));
             if(reP[0][i]>R_max)R_max=reP[0][i];
             //fix the degrees
-            if(coordinate[0][i]<centerY)
+            if(coordinate2[0][i]<centerY)
                 reP[1][i]=0-reP[1][i];
-            else if(coordinate[0][i]>centerY)
+            else if(coordinate2[0][i]>centerY)
                 reP[1][i]=360-reP[1][i];
         }
         if(radiusModel == R_MAX_WIDTH)
@@ -245,7 +321,7 @@ public class ImageShapeContext
         else
             R = R_max;
         r=R/5;
-        for(i=0;i<boundaryNum;++i)
+        for(i=0;i<selectNum;++i)
         {
             for(k=0;k<5;++k)
             {
@@ -266,7 +342,7 @@ public class ImageShapeContext
         //归一化
         for(i=0;i<60;++i)
         {
-            shapeContext[i]=(float)scHistogram[i]/boundaryNum;
+            shapeContext[i]=(float)scHistogram[i]/selectNum;
         }
         reP=null;
         scHistogram =null;

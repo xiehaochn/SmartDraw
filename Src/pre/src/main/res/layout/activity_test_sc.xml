@@ -8,10 +8,10 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="#00aaaa"/>
+        android:background="#000000"/>
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/get"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="get"/>
@@ -25,8 +25,7 @@
             android:id="@+id/iv_after"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#999999"
-            android:src="@drawable/fish4"
+            android:background="#FFFFFF"
             android:layout_gravity="center_vertical"
             android:scaleType="fitCenter"/>
 
@@ -36,11 +35,79 @@
             android:layout_height="match_parent"/>
     </FrameLayout>
 
-    <View
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:background="#880088"/>
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        android:background="#aaaaaa">
+
+        <ImageButton
+            android:id="@+id/pen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="pen"
+            android:background="@drawable/pen"
+            />
+        <ImageButton
+            android:id="@+id/eraser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="eraser"
+            android:background="@drawable/eraser"/>
+        <ImageButton
+            android:id="@+id/color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="color"
+            android:background="@drawable/color"/>
+        <ImageButton
+            android:id="@+id/undo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="undo"
+            android:background="@drawable/undo"/>
+        <ImageButton
+            android:id="@+id/redo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="redo"
+            android:background="@drawable/redo"/>
+        <ImageButton
+            android:id="@+id/clear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="clear"
+            android:background="@drawable/clear"/>
+
+        <ImageButton
+            android:id="@+id/save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="save"
+            android:background="@drawable/save"/>
+        <ImageButton
+            android:id="@+id/select"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="select"
+            android:background="@drawable/select"/>
+        <ImageButton
+            android:id="@+id/delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="delete"
+            android:background="@drawable/close"/>
+    </LinearLayout>
 
 
 </LinearLayout>
