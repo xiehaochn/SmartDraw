@@ -5,6 +5,13 @@
     <color name="colorAccent">#000000</color>
     <color name="textColor">#8a8a8a</color>
 
-    <!--<color name="stringColor">#CDAA7D</color>-->
+
     <color name="stringColor">#000000</color>
+
+    <color name="shadowColor">#44000000</color>
+    <color name="pressColor">#D4D4D4</color>
+    <color name="strokeColor">#A2B5CD</color>
+
+    <color name="toolsColor">#EEC591</color>
+
 </resources>

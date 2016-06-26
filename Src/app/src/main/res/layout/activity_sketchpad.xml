@@ -17,13 +17,19 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
+        <com.smartdraw.dijay.View.DoodleView
+            android:id="@+id/doodleView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
     </FrameLayout>
 
     <LinearLayout
+
         android:id="@+id/tools"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="#E0FFFF"
+        android:background="#D9D9D9"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="12dp"
@@ -31,69 +37,95 @@
 
         <ImageButton
             android:id="@+id/pen"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="pen"
-            android:background="@drawable/pen"
-            android:elevation="@dimen/default_elevation"
-            android:layout_marginRight="7dp"
-            />
+            android:scaleType="centerCrop"
+            android:src="@drawable/pen"
+            android:background="@drawable/btn_tools"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="@dimen/sketchpad_button_space"/>
+
         <ImageButton
             android:id="@+id/eraser"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="eraser"
-            android:background="@drawable/eraser"
-            android:elevation="@dimen/default_elevation"
-            android:layout_marginRight="7dp"/>
+            android:scaleType="centerCrop"
+            android:background="@drawable/btn_tools"
+            android:src="@drawable/eraser"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="@dimen/sketchpad_button_space"/>
+
         <ImageButton
             android:id="@+id/color"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="color"
-            android:background="@drawable/color"
-            android:elevation="@dimen/default_elevation"
-            android:layout_marginRight="7dp"/>
+            android:scaleType="centerCrop"
+            android:src="@drawable/color"
+            android:background="@drawable/btn_tools"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="@dimen/sketchpad_button_space"/>
+
         <ImageButton
             android:id="@+id/undo"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="undo"
-            android:background="@drawable/undo"
-            android:elevation="@dimen/default_elevation"
-            android:layout_marginRight="7dp"/>
+            android:scaleType="centerCrop"
+            android:src="@drawable/undo"
+            android:background="@drawable/btn_tools"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="@dimen/sketchpad_button_space"/>
+
         <ImageButton
             android:id="@+id/redo"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="redo"
-            android:background="@drawable/redo"
-            android:elevation="@dimen/default_elevation"
-            android:layout_marginRight="7dp"/>
+            android:scaleType="centerCrop"
+            android:src="@drawable/redo"
+            android:background="@drawable/btn_tools"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="@dimen/sketchpad_button_space"/>
+
         <ImageButton
             android:id="@+id/clear"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="clear"
-            android:background="@drawable/clear"
-            android:elevation="@dimen/default_elevation"
-            android:layout_marginRight="7dp"/>
+            android:scaleType="centerCrop"
+            android:src="@drawable/clear"
+            android:background="@drawable/btn_tools"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="@dimen/sketchpad_button_space"/>
 
         <ImageButton
             android:id="@+id/save"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="save"
-            android:background="@drawable/save"
-            android:elevation="@dimen/default_elevation"/>
-
+            android:scaleType="centerCrop"
+            android:src="@drawable/save"
+            android:background="@drawable/btn_tools"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="@dimen/sketchpad_button_space"/>
 
     </LinearLayout>
 

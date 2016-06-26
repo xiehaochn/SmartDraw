@@ -21,7 +21,8 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:orientation="horizontal"
-        android:background="#FFFFFF">
+        android:gravity="center"
+        android:background="@drawable/ll_press">
 
         <ImageView
             android:layout_width="25dp"
@@ -65,8 +66,9 @@
         android:id="@+id/llSuggestion"
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:gravity="center"
         android:orientation="horizontal"
-        android:background="#FFFFFF">
+        android:background="@drawable/ll_press">
 
         <ImageView
             android:layout_width="25dp"
