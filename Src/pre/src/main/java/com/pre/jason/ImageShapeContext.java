@@ -3,6 +3,7 @@ package com.pre.jason;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class ImageShapeContext
@@ -14,57 +15,77 @@ public class ImageShapeContext
     }
     private static String DEBUG_LOG = "Image_Shape_Context";
 
-    public static final int CENTER_OF_BITMAP = 0;
-    public static final int CENTER_OF_MASS = 1;
-
     /**
      * 1.there is assuming that the width of the reference bitmap(for hint)
      * is bigger than the height of itself, so we can let the R_MAX to be width/2.<br>
      *
      * 2.another assumption is the width of the doodleview bitmap is equal to the width of
-     * the hit bitmap.(however the hint bitmap showed in the imageview will be scaled at the
+     * the hit bitmap.(however the hint bitmap showed in the imageview will be scaled when the
      * scaleType="fitCenter", so the width of the doodelview will not be equal to the
-     * width of the hint bitmap in most cases. Luckily the shapecontext of R_MAX_WIDTH
+     * width of the hint bitmap in most cases. Luckily the shapecontext of CENTER_OF_BITMAP
      * is expanded invariant)
      *
-    */
-    public static final int R_MAX_WIDTH = 0;
-    /**
-     * the shapecontext of R_MAX_SELF is expanded and translated invariant
      */
-    public static final int R_MAX_SELF = 1;
+    public static final int CENTER_OF_BITMAP = 0;
+    /**
+     * the shapecontext of CENTER_OF_MASS is expanded and translated invariant
+     */
+    public static final int CENTER_OF_MASS = 1;
+
+    //basic parameters for shapecontext
+    public static final int SC_RADIUS = 5;
+    public static final int SC_ANGLE = 12;
+    public static final int SC_DIMENSION = SC_RADIUS*SC_ANGLE;
+    public static final float SC_CELL_DEGREE = 360/SC_ANGLE;
     private int width;
     private int height;
+
+    //parameters for get similarity number
+    public int minBoundaryNum;
+    private static float UNLIKE_THRESHOLD_FIRST = 0.8f;
+    private static float UNLIKE_THRESHOLD_SECOND = 0.9f;
+    private static int UNLIKE_NUM_MAX = 10;
+    private int unlikeNum = 0;
+
+    /**
+     * get the score of the doodleView bitmap which is compared with the final hint bitmap
+     */
+    public int getScore(float scDoodle[], float scHint[], int dimension)
+    {
+        float similarity = getSimilarity(scDoodle, scHint, dimension);
+        return (int) (50*(2-similarity));
+    }
 
     /**
      * get the similarity number from several shapecontexts
      */
-    public int getSimilarityNumber(float sc1[], float sc2[][], int dimension)
+    public int getSimilarityNumber(float scDoodle[], float scHints[][], int dimension)
     {
         int result = -1;
         int i;
-        float similarity[] = new float[sc2.length];
-        float min= Integer.MAX_VALUE;
-        for(i=0;i<sc2.length;++i)
+        float similarity[] = new float[scHints.length];
+        float min= Float.MAX_VALUE;
+        for(i=0;i<scHints.length;++i)
         {
-            similarity[i] = getSimilarity(sc1, sc2[i], dimension);
-            if(i==0)
+            similarity[i] = getSimilarity(scDoodle, scHints[i], dimension);
+            if (min>similarity[i])
             {
                 min = similarity[i];
                 result = i;
-            }
-            else
-            {
-                if (min>similarity[i])
-                {
-                    min = similarity[i];
-                    result = i;
-                }
             }
             if(DEBUG)
             {
                 Log.d(DEBUG_LOG, "similarity" + i + ": " + similarity[i]);
             }
+        }
+        Arrays.sort(similarity);
+        if(similarity[0]>UNLIKE_THRESHOLD_FIRST && similarity[1]>UNLIKE_THRESHOLD_SECOND)
+            unlikeNum++;
+        else
+            unlikeNum = 0;
+        if(unlikeNum>UNLIKE_NUM_MAX)
+        {
+            result = -1;
         }
         return result;
     }
@@ -72,15 +93,15 @@ public class ImageShapeContext
     /**
      * get the similarity between two shapecontext
      */
-    public float getSimilarity(float sc1[], float sc2[], int dimension)
+    public float getSimilarity(float scDoodle[], float scHint[], int dimension)
     {
         float result= 0f;
         int i;
         for(i=0;i<dimension;++i)
         {
-            if(sc1[i]+sc2[i]!=0)
-                //result= result + (sc1[i]-sc2[i])*(sc1[i]-sc2[i])/(sc1[i]+sc2[i]);
-                result= result + Math.abs(sc1[i] - sc2[i]);
+//            if(scDoodle[i]+scHints[i]!=0)
+//                result= result + (sc1[i]-sc2[i])*(sc1[i]-sc2[i])/(sc1[i]+sc2[i]);
+            result= result + Math.abs(scDoodle[i] - scHint[i]);
         }
         return result;
     }
@@ -88,17 +109,17 @@ public class ImageShapeContext
     /**
      * get shape contexts of many bitmaps
      * @param sobelThreshold for example 125
-     * @param boundaryMax for example 300
      * @param centerModel CENTER_OF_BITMAP or CENTER_OF_MASS
      */
     public void  getShapeContext(List<Bitmap> bitmaps, float shapeContext[][], int sobelThreshold,
-                               int boundaryMax, int centerModel,int radiusModel)
+                                int centerModel)
     {
         int i;
         for(i=0;i<bitmaps.size();++i)
         {
             int boundaryNum = getShapeContext(bitmaps.get(i), shapeContext[i], sobelThreshold,
-                    boundaryMax, centerModel,radiusModel);
+                    centerModel);
+            if(i==0)minBoundaryNum = boundaryNum/2;
             if(DEBUG)
             {
                 Log.d(DEBUG_LOG, "boundaryNum" + i + ": " + boundaryNum);
@@ -111,12 +132,11 @@ public class ImageShapeContext
      * get the shape context of one image bitmap
      * @param shapeContext new float[60]
      * @param sobelThreshold for example 125
-     * @param boundaryMax for example 300
      * @param centerModel CENTER_OF_BITMAP or CENTER_OF_MASS
      * @return the final number of boundary
      */
     public int getShapeContext(Bitmap image, float shapeContext[], int sobelThreshold,
-                                int boundaryMax, int centerModel,int radiusModel)
+                               int centerModel)
     {
         width = image.getWidth();
         height = image.getHeight();
@@ -130,7 +150,7 @@ public class ImageShapeContext
         pixels = null;
         int boundaryNum = getBinaryBySobel(gray, binary, coordinate, sobelThreshold);
         gray = null;
-        calculateShapeContext(coordinate,boundaryNum,shapeContext,centerModel,radiusModel);
+        calculateShapeContext(coordinate,boundaryNum,shapeContext,centerModel);
         coordinate = null;
 
         return boundaryNum;
@@ -204,7 +224,7 @@ public class ImageShapeContext
      * calculate the ShapeContext for one point(center of bitmap or mass center of boundary)
      */
     private void calculateShapeContext(int[][] coordinate, int boundaryNum, float[] shapeContext,
-                                       int centerModel, int radiusModel)
+                                       int centerModel)
     {
         if(boundaryNum==0) return;
 
@@ -227,7 +247,7 @@ public class ImageShapeContext
         //relative position radius and angle
         float reP[][]=new float[2][boundaryNum];
         float R_max=0,R,r;
-        int scHistogram[] = new int[5*12];
+        int scHistogram[] = new int[SC_DIMENSION];
         for(i=0;i<boundaryNum;++i)
         {
             reP[0][i]=(float)Math.sqrt((coordinate[0][i]-centerY)*(coordinate[0][i]-centerY)+
@@ -240,22 +260,22 @@ public class ImageShapeContext
             else if(coordinate[0][i]>centerY)
                 reP[1][i]=360-reP[1][i];
         }
-        if(radiusModel == R_MAX_WIDTH)
+        if(centerModel == CENTER_OF_BITMAP)
             R = width/2;
         else
             R = R_max;
-        r=R/5;
+        r=R/SC_RADIUS;
         for(i=0;i<boundaryNum;++i)
         {
-            for(k=0;k<5;++k)
+            for(k=0;k<SC_RADIUS;++k)
             {
-                if(reP[0][i]>=k*r && reP[0][i]<(k+1)*r)
+                if(reP[0][i]>k*r && reP[0][i]<=(k+1)*r)
                 {
-                    for(j=0;j<12;++j)
+                    for(j=0;j<SC_ANGLE;++j)
                     {
-                        if(reP[1][i]>=j*30 && reP[1][i] <(j+1)*30)
+                        if(reP[1][i]>=j*SC_CELL_DEGREE && reP[1][i] <(j+1)*SC_CELL_DEGREE)
                         {
-                            scHistogram[j+k*12]++;
+                            scHistogram[j+k*SC_ANGLE]++;
                             break;
                         }
                     }
@@ -264,7 +284,7 @@ public class ImageShapeContext
             }
         }
         //归一化
-        for(i=0;i<60;++i)
+        for(i=0;i<SC_DIMENSION;++i)
         {
             shapeContext[i]=(float)scHistogram[i]/boundaryNum;
         }

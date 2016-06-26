@@ -3,13 +3,11 @@ package com.pre.jason;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.pre.DoodleView;
 import com.pre.R;
@@ -21,14 +19,11 @@ public class TestSCActivity extends AppCompatActivity
 {
     private ImageView iv_after;
     private DoodleView doodleView;
-    private Button button;
+    private Button buttonGet;
+    private Button buttonCancel;
     private List<Bitmap> bitmaps;
-    private ImageShapeContext isc;
-    private float shapeContexts[][];
+    private HintUtils hintUtils;
 
-    private HandlerThread handlerThread;
-    private Handler subHandler;
-    private Handler mainHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -37,61 +32,25 @@ public class TestSCActivity extends AppCompatActivity
         setContentView(R.layout.activity_test_sc);
         iv_after = (ImageView) findViewById(R.id.iv_after);
         doodleView = (DoodleView) findViewById(R.id.doodleView);
-        button = (Button) findViewById(R.id.get);
+        buttonGet = (Button) findViewById(R.id.get);
+        buttonCancel = (Button) findViewById(R.id.cancel);
         init();
-
-        handlerThread = new HandlerThread("subThread");
-        handlerThread.start();
-        subHandler = new Handler(handlerThread.getLooper())
+        buttonGet.setOnClickListener(new View.OnClickListener()
         {
             @Override
-            public void handleMessage(Message msg)
+            public void onClick(View v)
             {
-                try
-                {
-                    Thread.sleep(100);
-                } catch (InterruptedException e)
-                {
-                    e.printStackTrace();
-                }
-                Bitmap bitmap=doodleView.getBitmap();
-                float sc1[] = new float[60];
-                int boundaryNum = isc.getShapeContext(bitmap, sc1, 125, 5000, ImageShapeContextPre.CENTER_OF_MASS,
-                        ImageShapeContextPre.R_MAX_SELF);
-                Log.d("debug", "boundaryNum" + ": " + boundaryNum);
-                int like = isc.getSimilarityNumber(sc1, shapeContexts, 60);
-                Message mainMsg=mainHandler.obtainMessage();
-                mainMsg.arg1=like;
-                mainHandler.sendMessage(mainMsg);
+                hintUtils.getScore(doodleView.getBitmap());
             }
-        };
-
-        mainHandler = new Handler()
+        });
+        buttonCancel.setOnClickListener(new View.OnClickListener()
         {
             @Override
-            public void handleMessage(Message msg)
+            public void onClick(View v)
             {
-                if(msg.arg1<=bitmaps.size()-2)
-                    iv_after.setImageBitmap(bitmaps.get(msg.arg1+1));
-                else
-                    iv_after.setImageBitmap(bitmaps.get(msg.arg1));
-                Message backMsg=subHandler.obtainMessage();
-                subHandler.sendMessage(backMsg);
+                hintUtils.cancelHint();
             }
-        };
-
-        Message backMsg=subHandler.obtainMessage();
-        subHandler.sendMessage(backMsg);
-
-//        button.setOnClickListener(new View.OnClickListener()
-//        {
-//            @Override
-//            public void onClick(View v)
-//            {
-//                Message backMsg=subHandler.obtainMessage();
-//                subHandler.sendMessage(backMsg);
-//            }
-//        });
+        });
     }
 
     private void init()
@@ -110,10 +69,48 @@ public class TestSCActivity extends AppCompatActivity
         bitmaps.add(bitmap4);
 //        bitmaps.add(bitmap5);
 //        bitmaps.add(bitmap6);
-        isc = new ImageShapeContext();
-        shapeContexts = new float[bitmaps.size()][60];
-        isc.getShapeContext(bitmaps, shapeContexts, 125, 5000, ImageShapeContextPre.CENTER_OF_MASS,
-                ImageShapeContextPre.R_MAX_SELF);
         iv_after.setImageBitmap(bitmap1);
+
+        hintUtils = new HintUtils()
+        {
+            @Override
+            public void onInitComplete()
+            {
+                Toast.makeText(TestSCActivity.this,"init complete",Toast.LENGTH_SHORT).show();
+                doodleView.post(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        hintUtils.startHint(doodleView.getBitmap());
+                    }
+                });
+            }
+
+            @Override
+            public Bitmap onUpdateHint(int index)
+            {
+                if(index<0)
+                {
+                    Toast.makeText(TestSCActivity.this,"don't rudely drawing",Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    if(index<=bitmaps.size()-2)
+                        iv_after.setImageBitmap(bitmaps.get(index+1));
+                    else
+                        iv_after.setImageBitmap(bitmaps.get(index));
+                }
+                return doodleView.getBitmap();
+            }
+
+            @Override
+            public void onGetScore(int score)
+            {
+                Toast.makeText(TestSCActivity.this,"score:"+score,Toast.LENGTH_SHORT).show();
+            }
+        };
+        hintUtils.init(bitmaps);
+
     }
 }
