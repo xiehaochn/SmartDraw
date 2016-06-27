@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.smartdraw.R;
 import com.smartdraw.hawx.BaseActivity;
@@ -21,28 +22,26 @@ import butterknife.ButterKnife;
  */
 public class MoreActivity extends BaseActivity implements View.OnClickListener
 {
-    @BindView(R.id.llAbout)
     LinearLayout llAbout;
-    @BindView (R.id.llSuggestion)
     LinearLayout llSuggestion;
-    @BindView(R.id.ivBack)
-    ImageView ivBack;
+    LinearLayout llUpdata;
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
     {
-        super.onCreate (savedInstanceState);
+        setHideStatusBar(false);
         setContentView (R.layout.activity_more);
-        ButterKnife.bind (this);
+        super.onCreate (savedInstanceState);
+
 
         llAbout = (LinearLayout) findViewById(R.id.llAbout);
         llSuggestion = (LinearLayout) findViewById(R.id.llSuggestion);
-        ivBack = (ImageView) findViewById (R.id.ivBack);
+        llUpdata= (LinearLayout) findViewById(R.id.llupdata);
 
         llAbout.setOnClickListener(this);
         llSuggestion.setOnClickListener (this);
-        ivBack.setOnClickListener (this);
+        llUpdata.setOnClickListener(this);
 
     }
     @Override
@@ -60,9 +59,11 @@ public class MoreActivity extends BaseActivity implements View.OnClickListener
                 intent2.setClass (MoreActivity.this, ContactUsActivity.class);
                 startActivity (intent2);
                 break;
-            case R.id.ivBack:
-                finish ();
+            case R.id.llupdata:{
+                Toast.makeText(this, "Check Updata", Toast.LENGTH_SHORT).show();
                 break;
+            }
+
         }
     }
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#63B8FF</color>
-    <color name="colorPrimaryDark">#FFFFFF</color>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#000000</color>
     <color name="textColor">#8a8a8a</color>
 
@@ -10,7 +10,7 @@
 
     <color name="shadowColor">#44000000</color>
     <color name="pressColor">#D4D4D4</color>
-    <color name="strokeColor">#A2B5CD</color>
+    <color name="strokeColor">#8a8a8a</color>
 
     <color name="toolsColor">#EEC591</color>
 

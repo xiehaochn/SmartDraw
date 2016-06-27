@@ -19,18 +19,9 @@ public class ContactUsActivity extends BaseActivity
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
     {
-        super.onCreate (savedInstanceState);
+        setHideStatusBar(false);
         setContentView (R.layout.activity_contact_us);
-        ImageView ivBack = (ImageView) findViewById (R.id.ivBack);
-        if (ivBack != null)
-        {
-            ivBack.setOnClickListener (new View.OnClickListener () {
-                @Override
-                public void onClick(View v)
-                {
-                    finish ();
-                }
-            });
-        }
+        super.onCreate (savedInstanceState);
+
     }
 }

@@ -1,39 +1,23 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
     <include
-        android:id="@+id/toolbar"
         layout="@layout/view_toolbar"/>
-
-    <FrameLayout
-        android:layout_below="@+id/toolbar"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/tools">
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <com.smartdraw.dijay.View.DoodleView
-            android:id="@+id/doodleView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
-    </FrameLayout>
 
     <LinearLayout
-
-        android:id="@+id/tools"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="#D9D9D9"
+        android:id="@+id/ll"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="3dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="3dp">
 
         <ImageButton
             android:id="@+id/pen"
@@ -41,13 +25,12 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="pen"
-            android:scaleType="centerCrop"
-            android:src="@drawable/pen"
+
+            android:src="@mipmap/icon_huabi"
+
             android:background="@drawable/btn_tools"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:layout_marginRight="@dimen/sketchpad_button_space"/>
+            android:layout_margin="2dp"
+            />
 
         <ImageButton
             android:id="@+id/eraser"
@@ -55,12 +38,12 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="eraser"
-            android:scaleType="centerCrop"
+
             android:background="@drawable/btn_tools"
-            android:src="@drawable/eraser"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:layout_marginRight="@dimen/sketchpad_button_space"/>
+            android:src="@mipmap/icon_xiangpi"
+
+            android:layout_margin="2dp"
+            />
 
         <ImageButton
             android:id="@+id/color"
@@ -68,12 +51,12 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="color"
-            android:scaleType="centerCrop"
-            android:src="@drawable/color"
+
+            android:src="@mipmap/icon_xuanse"
+
+            android:layout_margin="2dp"
             android:background="@drawable/btn_tools"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:layout_marginRight="@dimen/sketchpad_button_space"/>
+            />
 
         <ImageButton
             android:id="@+id/undo"
@@ -81,12 +64,12 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="undo"
-            android:scaleType="centerCrop"
-            android:src="@drawable/undo"
+
+            android:src="@mipmap/icon_huitui"
+
+            android:layout_margin="2dp"
             android:background="@drawable/btn_tools"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:layout_marginRight="@dimen/sketchpad_button_space"/>
+            />
 
         <ImageButton
             android:id="@+id/redo"
@@ -94,12 +77,12 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="redo"
-            android:scaleType="centerCrop"
-            android:src="@drawable/redo"
+
+            android:src="@mipmap/icon_qianjin"
             android:background="@drawable/btn_tools"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:layout_marginRight="@dimen/sketchpad_button_space"/>
+
+            android:layout_margin="2dp"
+            />
 
         <ImageButton
             android:id="@+id/clear"
@@ -107,12 +90,12 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="clear"
-            android:scaleType="centerCrop"
-            android:src="@drawable/clear"
+
+            android:src="@mipmap/icon_sanchu"
+
+            android:layout_margin="2dp"
             android:background="@drawable/btn_tools"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:layout_marginRight="@dimen/sketchpad_button_space"/>
+            />
 
         <ImageButton
             android:id="@+id/save"
@@ -120,14 +103,19 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="save"
-            android:scaleType="centerCrop"
-            android:src="@drawable/save"
+
+            android:src="@mipmap/icon_save"
             android:background="@drawable/btn_tools"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:layout_marginRight="@dimen/sketchpad_button_space"/>
+
+            android:layout_margin="2dp"
+            />
 
     </LinearLayout>
+        <com.smartdraw.dijay.View.DoodleView
+            android:id="@+id/doodleView"
+            android:layout_above="@id/ll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </RelativeLayout>
 
-
-</RelativeLayout>
+</LinearLayout>

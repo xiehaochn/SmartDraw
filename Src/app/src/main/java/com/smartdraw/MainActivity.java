@@ -13,15 +13,7 @@ import com.smartdraw.hawx.BaseActivity;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener
 {
-//
-//        @BindView(R.id.imageview_1)
-//        ImageView sketchpad;
-//        @BindView (R.id.imageview_2)
-//        ImageView select_picture;
-//        @BindView (R.id.imageview_3)
-//        ImageView skim_picture;
-//        @BindView (R.id.imageview_4)
-//        ImageView more_about;
+
 
     private ImageView sketchpad;
     private ImageView select_picture;

@@ -28,4 +28,5 @@ dependencies {
 
     compile 'com.jakewharton:butterknife:8.1.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.github.QuadFlask:colorpicker:0.0.10'
 }

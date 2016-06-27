@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:title="全屏" android:id="@+id/quanpin" app:showAsAction="always" android:orderInCategory="100" android:icon="@mipmap/icon_fullscreen"/>
+    <item
+        android:id="@+id/overflow"
+        android:icon="@mipmap/icon_gengduo"
+        android:orderInCategory="201"
+        android:title="popupwindow"
+        app:showAsAction="always">
+
+        <menu>
+            <item
+                android:id="@+id/zijihua"
+                android:icon="@mipmap/icon_huabi"
+                android:orderInCategory="90"
+                android:title="自己画"
+                app:showAsAction="always|withText"/>
+            <item
+                android:id="@+id/xuantu"
+                android:icon="@mipmap/icon_xuantu"
+                android:orderInCategory="100"
+                android:title="选图"
+                app:showAsAction="always|withText"/>
+        </menu>
+    </item>
+</menu>

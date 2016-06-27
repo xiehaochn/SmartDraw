@@ -2,22 +2,36 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="vertical"
+
+    >
 
     <include
-        android:id="@+id/toolbar"
-        layout="@layout/view_toolbar"/>
 
+        layout="@layout/view_toolbar"/>
+    <ImageView
+        android:layout_margin="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:src="@drawable/about_pic"
+        android:paddingTop="2dp"
+        android:paddingLeft="1dp"
+        android:paddingBottom="3dp"
+        android:paddingRight="3dp"
+        android:background="@drawable/base_background"
+        />
     <TextView
-        android:layout_marginTop="30dp"
+
+        android:layout_marginTop="10dp"
         android:layout_gravity="center"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
-        android:layout_marginBottom="50dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:textColor="@color/textColor"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="      智能简笔画，一款教儿童画画的手机APP，主要包括三个部分：跟我画、自己画、打分。软件通过数字图像处理技术为儿童实时提供绘画提示（简笔线条），以此画出好看的图片。本软件旨在培养儿童对形状和轮廓的理解、认知与记忆能力。"
-        android:textSize="25sp"
+        android:textSize="20sp"
         />
 
 </LinearLayout>

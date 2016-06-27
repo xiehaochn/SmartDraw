@@ -5,47 +5,41 @@
               android:layout_height="match_parent"
               android:background="#F5F5F5">
     <include
-        android:id="@+id/toolbar"
+
         layout="@layout/view_toolbar"/>
 
     <LinearLayout
-        android:layout_marginTop="20dp"
+
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="vertical">
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:background="@color/stringColor"/>
-
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="自己画的"
-            android:textSize="30sp"
+            android:textSize="25sp"
             android:padding="5dp"
-            android:textColor="#2F4F4F"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:elevation="5dp"/>
+            android:textColor="@color/textColor"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/base_background"
+            />
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:background="@color/stringColor"/>
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/textColor"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvSelf"
-            android:layout_width="wrap_content"
-            android:padding="7dp"
-            android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="5dp"
+            >
 
         </android.support.v7.widget.RecyclerView>
 
@@ -59,33 +53,29 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:background="@color/stringColor"/>
+
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="他人画的"
-            android:textSize="30sp"
+            android:text="优秀作品"
+            android:textSize="25sp"
             android:padding="5dp"
-            android:textColor="#2F4F4F"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:elevation="5dp"/>
+            android:textColor="@color/textColor"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/base_background"
+            />
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:background="@color/stringColor"/>
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/textColor"/>
         <android.support.v7.widget.RecyclerView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="5dp"
             android:id="@+id/rvOther">
 
         </android.support.v7.widget.RecyclerView>

@@ -4,13 +4,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.smartdraw.R;
-import com.smartdraw.dijay.Adapter.SkimOtherPictureAdapter;
-import com.smartdraw.dijay.Adapter.SkimSelfPictureAdapter;
+import com.smartdraw.dijay.Adapter.SkimPicAdapter;
 import com.smartdraw.hawx.BaseActivity;
 
 import java.util.ArrayList;
@@ -27,8 +23,8 @@ public class SkimPictureActivity extends BaseActivity
 {
     private RecyclerView selfRecyclerView;
     private RecyclerView otherRecyclerView;
-    private SkimSelfPictureAdapter selfAdapter;
-    private SkimOtherPictureAdapter otherAdapter;
+    private SkimPicAdapter selfAdapter;
+    private SkimPicAdapter otherAdapter;
     private List<Integer> selfDatas;
     private List<Integer> otherDatas;
 
@@ -37,53 +33,22 @@ public class SkimPictureActivity extends BaseActivity
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
     {
-        super.onCreate(savedInstanceState);
+        setHideStatusBar(false);
         setContentView(R.layout.activity_skim_picture);
-        ImageView ivBack = (ImageView) findViewById (R.id.ivBack);
-        if (ivBack != null)
-        {
-            ivBack.setOnClickListener (new View.OnClickListener () {
-                @Override
-                public void onClick(View v)
-                {
-                    finish ();
-                }
-            });
-        }
+        super.onCreate(savedInstanceState);
 
         initDatas ();
         selfRecyclerView = (RecyclerView) findViewById (R.id.rvSelf);
-
+        otherRecyclerView = (RecyclerView) findViewById (R.id.rvOther);
         LinearLayoutManager linearLayoutManager1 = new LinearLayoutManager (this);
         linearLayoutManager1.setOrientation (LinearLayoutManager.HORIZONTAL);
         selfRecyclerView.setLayoutManager (linearLayoutManager1);
-
-        selfAdapter = new SkimSelfPictureAdapter (this, selfDatas);
-        selfAdapter.setOnItemClickListener (new SkimSelfPictureAdapter.OnItemClickListener () {
-            @Override
-            public void onItemClick(View view, int position)
-            {
-                Toast.makeText(SkimPictureActivity.this,position+"",Toast.LENGTH_SHORT).show ();
-            }
-        });
+        selfAdapter = new SkimPicAdapter (this, selfDatas);
         selfRecyclerView.setAdapter (selfAdapter);
-
-
-
-        otherRecyclerView = (RecyclerView) findViewById (R.id.rvOther);
-
         LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager (this);
         linearLayoutManager2.setOrientation (LinearLayoutManager.HORIZONTAL);
-        otherRecyclerView.setLayoutManager (linearLayoutManager2);
-
-        otherAdapter = new SkimOtherPictureAdapter (this, otherDatas);
-        otherAdapter.setOnItemClickListener (new SkimOtherPictureAdapter.OnItemClickListener () {
-            @Override
-            public void onItemClick(View view, int position)
-            {
-                Toast.makeText(SkimPictureActivity.this,position+"",Toast.LENGTH_SHORT).show ();
-            }
-        });
+        otherRecyclerView.setLayoutManager(linearLayoutManager2);
+        otherAdapter = new SkimPicAdapter (this, otherDatas);
         otherRecyclerView.setAdapter (otherAdapter);
 
 

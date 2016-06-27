@@ -68,8 +68,8 @@ public class BaseDialog extends Dialog
         Window dialogWindow = getWindow ();
         WindowManager.LayoutParams lp = dialogWindow.getAttributes ();
         DisplayMetrics displayMetrics = context.getResources ().getDisplayMetrics ();
-        lp.width = (int) (displayMetrics.widthPixels * 0.9);
-        lp.height = (int) (displayMetrics.heightPixels * 0.5);
+        lp.width = (int) (displayMetrics.widthPixels * 0.6);
+        lp.height = (int) (displayMetrics.heightPixels * 0.4);
         dialogWindow.setGravity (Gravity.CENTER_VERTICAL);
         dialogWindow.setAttributes (lp);
 

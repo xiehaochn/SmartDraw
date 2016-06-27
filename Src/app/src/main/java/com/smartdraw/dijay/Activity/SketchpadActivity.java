@@ -1,29 +1,40 @@
 package com.smartdraw.dijay.Activity;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
+
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
+
+import android.widget.Button;
 import android.widget.ImageButton;
+
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.PopupWindow;
-import android.widget.SimpleAdapter;
+import android.widget.SeekBar;
+import android.widget.Toast;
 
+
+import com.flask.colorpicker.ColorPickerView;
+import com.flask.colorpicker.OnColorSelectedListener;
+import com.flask.colorpicker.slider.AlphaSlider;
+import com.flask.colorpicker.slider.LightnessSlider;
 import com.smartdraw.R;
 import com.smartdraw.dijay.View.BaseDialog;
 import com.smartdraw.dijay.View.DoodleView;
 import com.smartdraw.hawx.BaseActivity;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,76 +48,29 @@ public class SketchpadActivity extends BaseActivity
 {
     public static boolean INIT_STATUS = true;
     private int position;
-    private PopupWindow pop;
-
     private DoodleView doodleView;
     private ImageButton eraser;
     private ImageButton pen;
-
-//    private  int setcolortemp;
-
-    List<Map<String, String>> moreList;
-    private ListView lvPopupList;// popupwindow中的ListView
-    private int NUM_OF_VISIBLE_LIST_ROWS = 2;// 指定popupwindow中Item的数量
+    private Dialog selectDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
     {
-        super.onCreate (savedInstanceState);
+        setHideStatusBar(false);
         setContentView (R.layout.activity_sketchpad);
-
+        super.onCreate (savedInstanceState);
         init ();
     }
 
     public void init()
     {
         INIT_STATUS = getIntent ().getBooleanExtra ("INIT_STATUS", true);
-
-        final ImageView ivMore = (ImageView) findViewById (R.id.ivMore);
-        if (ivMore != null)
-        {
-            ivMore.setVisibility (View.VISIBLE);
-            ivMore.setOnClickListener (new View.OnClickListener ()
-            {
-                @Override
-                public void onClick(View v)
-                {
-                    if (pop.isShowing ())
-                    {
-                        pop.dismiss ();
-                    } else
-                    {
-                        pop.showAsDropDown (ivMore, 50, 0);
-                    }
-                }
-            });
-        }
-
-
-        ImageView ivBack = (ImageView) findViewById (R.id.ivBack);
-        if (ivBack != null)
-        {
-            ivBack.setOnClickListener (new View.OnClickListener ()
-            {
-                @Override
-                public void onClick(View v)
-                {
-                    finish ();
-                }
-            });
-        }
-
         doodleView=(DoodleView) findViewById(R.id.doodleView);
-//        setcolortemp=doodleView.paintColor;
         pen=(ImageButton) findViewById(R.id.pen);
         eraser=(ImageButton) findViewById(R.id.eraser);
         pen.setEnabled(false);
+        pen.setBackgroundResource(R.drawable.btn_tools_selected);
         eraser.setEnabled(true);
-
-        initData();
-
-        initPopupWindow();
-
         if (INIT_STATUS)
         {
             SelectHint (this);
@@ -117,70 +81,17 @@ public class SketchpadActivity extends BaseActivity
         }
     }
 
-    /*初始化下拉菜单数据*/
-    private void initData()
-    {
-        moreList = new ArrayList<Map<String, String>> ();
-        Map<String, String> map;
-        map = new HashMap<String, String> ();
-        map.put("share_key", "选图");
-        moreList.add(map);
-        map = new HashMap<String, String>();
-        map.put("share_key", "自己画");
-        moreList.add(map);
-    }
 
-    /*初始化PopupWindow*/
-    private void initPopupWindow()
-    {
-        LayoutInflater inflater = (LayoutInflater) this
-                .getSystemService(LAYOUT_INFLATER_SERVICE);
-        View layout = inflater.inflate(R.layout.popup_menu, null);
-        lvPopupList = (ListView) layout.findViewById(R.id.lvPopupList);
-        pop = new PopupWindow(layout);
-        pop.setFocusable(true);// 加上这个popupwindow中的ListView才可以接收点击事件
 
-        lvPopupList.setAdapter(new SimpleAdapter (SketchpadActivity.this, moreList,
-                R.layout.popup_item, new String[] { "share_key" },
-                new int[] { R.id.tvPopupItem }));
-        lvPopupList.setOnItemClickListener (new AdapterView.OnItemClickListener () {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-            {
-                if (moreList.get (position).get ("share_key") == "自己画")
-                {
-                    pop.dismiss ();
-                } else if (moreList.get (position).get ("share_key")=="选图")
-                {
-                    Intent intent = new Intent ();
-                    intent.putExtra ("Activity_num", 0);
-                    intent.setClass (SketchpadActivity.this, SelectPictureActivity.class);
-                    startActivityForResult (intent, 0);
-                    pop.dismiss ();
-                }
-            }
-        });
 
-//         控制popupwindow的宽度和高度自适应
-        lvPopupList.measure(View.MeasureSpec.UNSPECIFIED,
-                View.MeasureSpec.UNSPECIFIED);
-        pop.setWidth(lvPopupList.getMeasuredWidth()-15);
-        pop.setHeight((lvPopupList.getMeasuredHeight() + 20)
-                * NUM_OF_VISIBLE_LIST_ROWS);
 
-        // 控制popupwindow点击屏幕其他地方消失
-        pop.setBackgroundDrawable(this.getResources().getDrawable(
-                R.drawable.blank));// 设置背景图片，不能在布局中设置，要通过代码来设置
-        pop.setOutsideTouchable(true);// 触摸popupwindow外部，popupwindow消失。这个要求你的popupwindow要有背景图片才可以成功，如上
-    }
 
 /*选图提示*/
     public void SelectHint(final Context context)
     {
-        final BaseDialog selectDialog = new BaseDialog (context, "提示", "先选图吧", "选图", "取消");
+        final BaseDialog selectDialog = new BaseDialog (context, "提示", "先选图吧!", "选图", "取消");
         selectDialog.show ();
         selectDialog.setCancelable (false);
-
         selectDialog.setDialogClickListener (new BaseDialog.DialogClickListener ()
         {
             @Override
@@ -207,14 +118,18 @@ public class SketchpadActivity extends BaseActivity
         doodleView.setPaintWidth(doodleView.paintWidth);
         doodleView.setPaintmode_pen();
         pen.setEnabled(false);
+        pen.setBackgroundResource(R.drawable.btn_tools_selected);
         eraser.setEnabled(true);
+        eraser.setBackgroundResource(R.drawable.btn_tools);
     }
     public void eraser(View view)
     {
         doodleView.setPaintmode_eraser();
         doodleView.setPaintColor(Color.WHITE);
         pen.setEnabled(true);
+        pen.setBackgroundResource(R.drawable.btn_tools);
         eraser.setEnabled(false);
+        eraser.setBackgroundResource(R.drawable.btn_tools_selected);
     }
     public void undo(View view)
     {
@@ -247,6 +162,88 @@ public class SketchpadActivity extends BaseActivity
 
     private void showColorDialog()
     {
+        selectDialog=new Dialog(this){
+            ColorPickerView colorPickerView;
+            LightnessSlider lightnessSlider;
+            AlphaSlider alphaSlider;
+            ImageView imageView;
+            SeekBar seekBar;
+            Button confirm;
+            Button cancel;
+            int tempColor=Color.BLACK;
+            int tempProgress=1;
+            @Override
+            protected void onCreate(Bundle savedInstanceState) {
+                super.onCreate(savedInstanceState);
+                colorPickerView= (ColorPickerView) findViewById(R.id.color_picker_view);
+                lightnessSlider= (LightnessSlider) findViewById(R.id.v_lightness_slider);
+                alphaSlider= (AlphaSlider) findViewById(R.id.v_alpha_slider);
+                imageView= (ImageView) findViewById(R.id.color_width);
+                seekBar= (SeekBar) findViewById(R.id.widthSeekBar);
+                confirm= (Button) findViewById(R.id.setColorButton);
+                cancel= (Button) findViewById(R.id.setColorButton_cancel);
+                final Bitmap bitmap = Bitmap.createBitmap(800, 100, Bitmap.Config.ARGB_8888);
+                final Canvas canvas = new Canvas(bitmap);
+                final Paint p = new Paint();
+                canvas.drawLine(160, 50, 640, 50, p);
+                imageView.setImageBitmap(bitmap);
+                colorPickerView.addOnColorSelectedListener(new OnColorSelectedListener() {
+                    @Override
+                    public void onColorSelected(int i) {
+                        tempColor=i;
+                        p.setColor(tempColor);
+                        p.setStrokeCap(Paint.Cap.ROUND);
+                        p.setStrokeWidth(tempProgress);
+                        bitmap.eraseColor(Color.WHITE);
+                        canvas.drawLine(160, 50, 640, 50, p);
+                        imageView.setImageBitmap(bitmap);
+                    }
+                });
+                seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                        tempProgress=progress;
+                        p.setColor(tempColor);
+                        p.setStrokeCap(Paint.Cap.ROUND);
+                        p.setStrokeWidth(tempProgress);
+                        bitmap.eraseColor(Color.WHITE);
+                        canvas.drawLine(160, 50, 640, 50, p);
+                        imageView.setImageBitmap(bitmap);
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+
+                    }
+                });
+                confirm.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        doodleView.setPaintColor(tempColor);
+                        doodleView.setPaintWidth(tempProgress);
+                        doodleView.paintWidth=tempProgress;
+                        doodleView.paintColor=tempColor;
+                        selectDialog.dismiss(); // dialog is not on the screen
+
+                    }
+                });
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        selectDialog.dismiss();
+                    }
+                });
+            }
+        };
+
+        selectDialog.setContentView(R.layout.dialog_colorpicker);
+        selectDialog.setCancelable(true);
+        selectDialog.show();
 
     }
 
@@ -293,6 +290,36 @@ public class SketchpadActivity extends BaseActivity
             /*返回跟我画，再重新画一遍*/
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_sketchpad,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.zijihua:{
+                Toast.makeText(this, "自己画", Toast.LENGTH_SHORT).show();
+                break;
+            }
+            case R.id.xuantu:{
+                Intent intent = new Intent ();
+                intent.putExtra ("Activity_num", 0);
+                intent.setClass (this, SelectPictureActivity.class);
+                SketchpadActivity.this.startActivityForResult (intent, 0);
+                break;
+            }
+            case R.id.quanpin:{
+                Toast.makeText(this, "全屏", Toast.LENGTH_SHORT).show();
+                break;
+            }
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
 
