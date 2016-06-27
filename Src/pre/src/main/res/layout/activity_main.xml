@@ -17,7 +17,7 @@
      <com.pre.DoodleView
         android:id="@+id/doodleView"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />	
+        android:layout_height="fill_parent" />
 	</FrameLayout>
     	
 	<LinearLayout
@@ -96,6 +96,14 @@
 	        android:onClick="delete"
 	        android:src="@drawable/close"/>
 	</LinearLayout>
+
+	<Button
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="SC test"
+		android:id="@+id/sctest"
+		android:onClick="sctest"
+		android:layout_gravity="top"/>
 		
 
 </RelativeLayout>

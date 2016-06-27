@@ -26,6 +26,8 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
+import com.pre.jason.TestSCActivity;
+
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MainActivity extends Activity
@@ -1049,5 +1051,11 @@ public class MainActivity extends Activity
 		//			System.out.println("匹配系数"+match[i]);
 		//		}
 
+	}
+
+	public void sctest(View view)
+	{
+		Intent intent = new Intent(this, TestSCActivity.class);
+		startActivity(intent);
 	}
 }

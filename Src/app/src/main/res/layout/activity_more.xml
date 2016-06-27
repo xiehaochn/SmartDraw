@@ -2,14 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:background="#F5F5F5">
     <include
         android:id="@+id/toolbar"
         layout="@layout/view_toolbar"/>
 
 
     <ImageView
-        android:layout_marginTop="45dp"
+        android:layout_marginTop="40dp"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/stringColor"/>
@@ -18,9 +19,17 @@
     <LinearLayout
         android:id="@+id/llAbout"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="60dp"
         android:orientation="horizontal"
-        android:background="#E0FFFF">
+        android:gravity="center"
+        android:background="@drawable/ll_press">
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center"
+            android:background="@drawable/about"
+            android:layout_marginLeft="20dp"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -30,14 +39,14 @@
             android:textSize="25sp"
             android:textColor="#2F4F4F"
             android:padding="5dp"
-            android:layout_marginLeft="30dp"/>
+            android:layout_marginLeft="5dp"/>
 
         <ImageView
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_gravity="center"
             android:src="@drawable/forward"
-            android:layout_marginLeft="250dp"
+            android:layout_marginLeft="225dp"
             android:layout_marginRight="10dp"/>
 
     </LinearLayout>
@@ -48,7 +57,7 @@
         android:background="@color/stringColor"/>
 
     <ImageView
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/stringColor"/>
@@ -56,9 +65,17 @@
     <LinearLayout
         android:id="@+id/llSuggestion"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="60dp"
+        android:gravity="center"
         android:orientation="horizontal"
-        android:background="#E0FFFF">
+        android:background="@drawable/ll_press">
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center"
+            android:background="@drawable/email"
+            android:layout_marginLeft="20dp"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -68,14 +85,14 @@
             android:textSize="25sp"
             android:textColor="#2F4F4F"
             android:padding="5dp"
-            android:layout_marginLeft="30dp"/>
+            android:layout_marginLeft="3dp"/>
 
         <ImageView
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_gravity="center"
             android:src="@drawable/forward"
-            android:layout_marginLeft="200dp"
+            android:layout_marginLeft="175dp"
             android:layout_marginRight="10dp"/>
 
     </LinearLayout>

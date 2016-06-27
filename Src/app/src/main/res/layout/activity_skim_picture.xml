@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:background="#F5F5F5">
     <include
         android:id="@+id/toolbar"
         layout="@layout/view_toolbar"/>
@@ -30,8 +31,7 @@
             android:textColor="#2F4F4F"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:elevation="5dp"
-            android:background="#E0FFFF"/>
+            android:elevation="5dp"/>
 
         <ImageView
             android:layout_width="match_parent"
@@ -40,12 +40,14 @@
             android:layout_marginRight="20dp"
             android:background="@color/stringColor"/>
 
-        <ListView
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvSelf"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:padding="7dp"
+            android:layout_height="0dp"
             android:layout_weight="1">
 
-        </ListView>
+        </android.support.v7.widget.RecyclerView>
 
     </LinearLayout>
 
@@ -73,8 +75,7 @@
             android:textColor="#2F4F4F"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:elevation="5dp"
-            android:background="#E0FFFF"/>
+            android:elevation="5dp"/>
 
         <ImageView
             android:layout_width="match_parent"
@@ -82,12 +83,12 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:background="@color/stringColor"/>
-        <ListView
+        <android.support.v7.widget.RecyclerView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:id="@+id/rvOther">
 
-        </ListView>
+        </android.support.v7.widget.RecyclerView>
     </LinearLayout>
 
 </LinearLayout>
